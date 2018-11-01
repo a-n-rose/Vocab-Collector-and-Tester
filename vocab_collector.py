@@ -43,22 +43,18 @@ class Collect_Vocab:
         return None
     
     def choose_list(self):
-        try:
-            print("\nHere are your lists")
-            available_nums = []
-            for key, value in self.dict_lists.items():
-                print(value,') ',key)
-                available_nums.append(value)
-            print("\nTable of interest: (enter corresponding number) ")
-            curr_list_id = input()
-            if int(curr_list_id) in available_nums:
-                self.curr_list_id = curr_list_id
-                print("Chosen list id is: {}".format(curr_list_id))
-            else:
-                print("\nPlease choose a corresponding number\n".upper())
-                self.choose_list()
-        except ValueError:
-            print("\nPlease enter only the NUMBER\n")
+        print("\nHere are your lists")
+        available_nums = []
+        for key, value in self.dict_lists.items():
+            print(value,') ',key)
+            available_nums.append(value)
+        print("\nTable of interest: (enter corresponding number) ")
+        curr_list_id = int(input())
+        if curr_list_id in available_nums:
+            self.curr_list_id = curr_list_id
+            print("Chosen list id is: {}".format(curr_list_id))
+        else:
+            print("\nPlease choose a corresponding number\n".upper())
             self.choose_list()
         return None
     
@@ -73,7 +69,6 @@ class Collect_Vocab:
         t = (name,lang,tags,self.user_id)
         self.c.execute(msg,t)
         self.conn.commit()
-        self.check_lists()
         return None
         
     def check_lists(self):
@@ -84,12 +79,13 @@ class Collect_Vocab:
         if len(lists) == 0:
             print("It looks like you don't have a list. Start one now!")
             self.create_new_list()
+            self.check_lists()
         else:
             self.dict_lists = {}
             for list_index in range(len(lists)):
                 name_of_list = lists[list_index][1]
                 self.dict_lists[name_of_list] = list_index+1
-                self.choose_list()
+            self.choose_list()
         return None
         
     def access_word_table(self):
@@ -157,6 +153,7 @@ class Collect_Vocab:
             self.check_lists()
         elif action_int == 2:
             self.create_new_list()
+            self.check_lists()
         else:
             print("\nPlease enter 1 or 2\n".upper())
             self.action_list()
