@@ -38,7 +38,9 @@ if __name__ == "__main__":
                 print("You've been added!")
         else:
             print("Welcome back {}!".format(cv.username))
-            
+        
+        cv.check_lists()
+        
     except AddUserError as aue:
         print(aue)
     except Exception as e:
