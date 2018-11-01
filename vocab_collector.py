@@ -21,6 +21,8 @@ class Collect_Vocab:
         print(users)
         user_there = [item for item in users if self.username in item]
         if len(user_there) == 1:
+            self.user_id = user_there[0][0]
+            print(self.user_id)
             return True
         elif len(user_there) == 0:
             return False
@@ -34,7 +36,16 @@ class Collect_Vocab:
         exist = self.check_if_user_exists()
         return exist
     
-    def access_user_vocablist_table(self):
-        msg = '''CREATE TABLE IF NOT EXISTS vocab_lists(name text, id )'''
+    def access_user_vocablists(self):
+        msg = '''CREATE TABLE IF NOT EXISTS vocab_lists(list_id integer primary key, list_name text, list_user_id integer, FOREIGN KEY(list_user_id) REFERENCES users(user_id) )'''
+        self.c.execute(msg)
+        self.conn.commit()
         return None
     
+    def check_lists(self):
+        self.access_user_vocablists()
+        msg = '''SELECT * FROM vocab_lists WHERE list_user_id=%s ''' % self.user_id
+        self.c.execute(msg)
+        lists = self.c.fetchall()
+        print(lists)
+        return None
