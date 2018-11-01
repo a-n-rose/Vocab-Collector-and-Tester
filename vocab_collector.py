@@ -42,17 +42,24 @@ class Collect_Vocab:
         self.conn.commit()
         return None
     
-    def print_lists(self):
-        self.access_user_vocablists()
-        msg = '''SELECT * FROM vocab_lists WHERE list_user_id=%s ''' % self.user_id
-        self.c.execute(msg)
-        lists = self.c.fetchall()
-        if len(lists) == 0:
-            print("It looks like you don't have a list. Start one now!")
-            self.create_new_list()
-            self.print_lists()
-        print(lists)
-        print(lists[0][4])
+    def choose_list(self):
+        try:
+            print("Here are your lists")
+            available_nums = []
+            for key, value in self.dict_lists.items():
+                print(value,') ',key)
+                available_nums.append(value)
+            print("\nTable of interest: (enter corresponding number) ")
+            curr_list_id = input()
+            if int(curr_list_id) in available_nums:
+                self.curr_list_id = curr_list_id
+                print("Chosen list id is: {}".format(curr_list_id))
+            else:
+                print("\nPlease choose a corresponding number\n".upper())
+                self.choose_list()
+        except ValueError:
+            print("\nPlease enter only the NUMBER\n")
+            self.choose_list()
         return None
     
     def create_new_list(self):
@@ -67,9 +74,23 @@ class Collect_Vocab:
         self.c.execute(msg,t)
         self.conn.commit()
         return None
-    
-    def choose_table(self):
-        pass
+        
+    def check_lists(self):
+        self.access_user_vocablists()
+        msg = '''SELECT * FROM vocab_lists WHERE list_user_id=%s ''' % self.user_id
+        self.c.execute(msg)
+        lists = self.c.fetchall()
+        if len(lists) == 0:
+            print("It looks like you don't have a list. Start one now!")
+            self.create_new_list()
+            self.check_lists()
+        else:
+            self.dict_lists = {}
+            for list_index in range(len(lists)):
+                name_of_list = lists[list_index][1]
+                self.dict_lists[name_of_list] = list_index+1
+                self.choose_list()
+        return None
         
     def access_word_table(self):
         msg = '''CREATE TABLE IF NOT EXISTS words(word_id integer primary key, word text, meaning text, tags text, word_list_id integer, FOREIGN KEY(word_list_id) REFERENCES vocab_lists(list_id)) '''
@@ -77,15 +98,14 @@ class Collect_Vocab:
         self.c.commit()
         return None
     
-    #def add_word(self):
-        #print("New word: ")
-        #word = input()
-        #print("Meathing: ")
-        #meaning = input()
-        #print("Tags (separated by ;)")
-        #tags = input()
-        #msg = '''INSERT INTO words VALUES (NULL, ?,?,?,?) '''
-        #t = (word,meaning,tags,self.curr_list_id)
-        #self.c.execute(msg,)
+    def add_word(self):
+        print("New word: ")
+        word = input()
+        print("Meathing: ")
+        meaning = input()
+        print("Tags (separated by ;)")
+        tags = input()
+        msg = '''INSERT INTO words VALUES (NULL, ?,?,?,?) '''
+        t = (word,meaning,tags,self.curr_list_id)
+        self.c.execute(msg,)
         
-    
