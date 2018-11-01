@@ -39,7 +39,8 @@ if __name__ == "__main__":
         else:
             print("Welcome back {}!".format(cv.username))
         
-        cv.check_lists()
+        cv.action_list()
+        cv.action_word()
         
     except AddUserError as aue:
         print(aue)

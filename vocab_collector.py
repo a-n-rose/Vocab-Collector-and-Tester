@@ -44,7 +44,7 @@ class Collect_Vocab:
     
     def choose_list(self):
         try:
-            print("Here are your lists")
+            print("\nHere are your lists")
             available_nums = []
             for key, value in self.dict_lists.items():
                 print(value,') ',key)
@@ -73,6 +73,7 @@ class Collect_Vocab:
         t = (name,lang,tags,self.user_id)
         self.c.execute(msg,t)
         self.conn.commit()
+        self.check_lists()
         return None
         
     def check_lists(self):
@@ -83,7 +84,6 @@ class Collect_Vocab:
         if len(lists) == 0:
             print("It looks like you don't have a list. Start one now!")
             self.create_new_list()
-            self.check_lists()
         else:
             self.dict_lists = {}
             for list_index in range(len(lists)):
@@ -95,17 +95,70 @@ class Collect_Vocab:
     def access_word_table(self):
         msg = '''CREATE TABLE IF NOT EXISTS words(word_id integer primary key, word text, meaning text, tags text, word_list_id integer, FOREIGN KEY(word_list_id) REFERENCES vocab_lists(list_id)) '''
         self.c.execute(msg)
-        self.c.commit()
+        self.conn.commit()
         return None
     
     def add_word(self):
+        self.access_word_table()
         print("New word: ")
         word = input()
-        print("Meathing: ")
+        print("Meaning: ")
         meaning = input()
         print("Tags (separated by ;)")
         tags = input()
         msg = '''INSERT INTO words VALUES (NULL, ?,?,?,?) '''
         t = (word,meaning,tags,self.curr_list_id)
-        self.c.execute(msg,)
+        self.c.execute(msg,t)
+    
+    def quiz_flashcard(self):
+        print("Currently in the works!")
+        pass
+    
+    def quiz_multchoice(self):
+        print("Multiple choice quizzing is in the works. Try Flashcards!")
+        self.quiz_flashcard()
+        return None
+    
+    def quiz_fillblank(self):
+        print("Fill-in-the-blank quizzing is in the works. Try Flashcards!")
+        self.quiz_flashcard()
+        return None
+    
+    def quiz_wordlist(self):
+        print("\nQuiz:\n1) Flashcards\n2) Multiple Choice\n3) Fill in the blank")
+        quiz_type = int(input("Enter 1, 2, or 3: "))
+        if quiz_type == 1:
+            self.quiz_flashcard()
+        elif quiz_type == 2:
+            self.quiz_multchoice()
+        elif quiz_type == 3:
+            self.quiz_fillblank()
+        else:
+            print("\nPlease enter 1, 2, or 3\n".upper())
+            self.quiz_wordlist()
+        return None
+        
+    def action_word(self):
+        print("\nAction:\n1) add word\n2) review words")
+        action_int = int(input("Enter 1 or 2: "))
+        if action_int == 1:
+            self.add_word()
+        elif action_int == 2:
+            self.quiz_wordlist()
+        else:
+            print("\nPlease enter 1 or 2\n".upper())
+            self.action_word()
+        return None
+    
+    def action_list(self):
+        print("\nAction:\n1) open existing list\n2) create new list")
+        action_int = int(input("Enter 1 or 2: "))
+        if action_int == 1:
+            self.check_lists()
+        elif action_int == 2:
+            self.create_new_list()
+        else:
+            print("\nPlease enter 1 or 2\n".upper())
+            self.action_list()
+        return None
         
