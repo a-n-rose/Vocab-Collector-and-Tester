@@ -8,6 +8,5 @@ My own personal vocabulary collector. No gui yet (probably never). Work in progr
 * Add new user/ check if username already exists
 
 ## ToDo:
-* fix: AttributeError: 'AddUserError' object has no attribute 'tb_frame'
 * create table for users to create new vocabulary lists
 * and a whole lot more - step by step!
