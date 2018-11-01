@@ -9,7 +9,7 @@ class Collect_Vocab:
         self.c.execute("")
         
     def access_users_table(self):
-        msg = '''CREATE TABLE IF NOT EXISTS users(username text)'''
+        msg = '''CREATE TABLE IF NOT EXISTS users(user_id integer primary key, username text)'''
         self.c.execute(msg)
         self.conn.commit()
         return None
@@ -28,8 +28,13 @@ class Collect_Vocab:
         
     def add_user(self):
         t = (self.username,)
-        msg = '''INSERT INTO users VALUES (?) '''
+        msg = '''INSERT INTO users VALUES (NULL,?) '''
         self.c.execute(msg,t)
         self.conn.commit()
         exist = self.check_if_user_exists()
         return exist
+    
+    def access_user_vocablist_table(self):
+        msg = '''CREATE TABLE IF NOT EXISTS vocab_lists(name text, id )'''
+        return None
+    
