@@ -42,6 +42,31 @@ class Collect_Vocab:
         self.conn.commit()
         return None
     
+    def action_word(self):
+        print("\nAction:\n1) add word\n2) review words")
+        action_int = int(input("Enter 1 or 2: "))
+        if action_int == 1:
+            self.add_word()
+        elif action_int == 2:
+            self.quiz_wordlist()
+        else:
+            print("\nPlease enter 1 or 2\n".upper())
+            self.action_word()
+        return None
+    
+    def action_list(self):
+        print("\nAction:\n1) open existing list\n2) create new list")
+        action_int = int(input("Enter 1 or 2: "))
+        if action_int == 1:
+            self.check_lists()
+        elif action_int == 2:
+            self.create_new_list()
+            self.check_lists()
+        else:
+            print("\nPlease enter 1 or 2\n".upper())
+            self.action_list()
+        return None
+    
     def choose_list(self):
         print("\nHere are your lists")
         available_nums = []
@@ -58,19 +83,6 @@ class Collect_Vocab:
             self.choose_list()
         return None
     
-    def create_new_list(self):
-        print("Name of list: ")
-        name = input()
-        print("Language: ")
-        lang = input()
-        print("Tags (separated by ;)")
-        tags = input()
-        msg = '''INSERT INTO vocab_lists VALUES (NULL, ?,?,?,?) '''
-        t = (name,lang,tags,self.user_id)
-        self.c.execute(msg,t)
-        self.conn.commit()
-        return None
-        
     def check_lists(self):
         self.access_user_vocablists()
         msg = '''SELECT * FROM vocab_lists WHERE list_user_id=%s ''' % self.user_id
@@ -86,6 +98,19 @@ class Collect_Vocab:
                 name_of_list = lists[list_index][1]
                 self.dict_lists[name_of_list] = list_index+1
             self.choose_list()
+        return None
+    
+    def create_new_list(self):
+        print("Name of list: ")
+        name = input()
+        print("Language: ")
+        lang = input()
+        print("Tags (separated by ;)")
+        tags = input()
+        msg = '''INSERT INTO vocab_lists VALUES (NULL, ?,?,?,?) '''
+        t = (name,lang,tags,self.user_id)
+        self.c.execute(msg,t)
+        self.conn.commit()
         return None
         
     def access_word_table(self):
@@ -133,29 +158,3 @@ class Collect_Vocab:
             print("\nPlease enter 1, 2, or 3\n".upper())
             self.quiz_wordlist()
         return None
-        
-    def action_word(self):
-        print("\nAction:\n1) add word\n2) review words")
-        action_int = int(input("Enter 1 or 2: "))
-        if action_int == 1:
-            self.add_word()
-        elif action_int == 2:
-            self.quiz_wordlist()
-        else:
-            print("\nPlease enter 1 or 2\n".upper())
-            self.action_word()
-        return None
-    
-    def action_list(self):
-        print("\nAction:\n1) open existing list\n2) create new list")
-        action_int = int(input("Enter 1 or 2: "))
-        if action_int == 1:
-            self.check_lists()
-        elif action_int == 2:
-            self.create_new_list()
-            self.check_lists()
-        else:
-            print("\nPlease enter 1 or 2\n".upper())
-            self.action_list()
-        return None
-        
