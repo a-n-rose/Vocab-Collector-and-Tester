@@ -109,6 +109,7 @@ class Collect_Vocab:
         self.c.execute(msg,t)
         self.conn.commit()
         self.is_user, self.user_id = self.check_if_user_exists(username)
+        print("\nWelcome {}! We're glad you're here.\n".format(username))
         return None
     
     
@@ -156,7 +157,7 @@ class Collect_Vocab:
         return None
     
     def access_user_vocablists(self):
-        msg = '''CREATE TABLE IF NOT EXISTS vocab_lists(list_id integer primary key, list_name text, language text, tags text, list_user_id integer, FOREIGN KEY(list_user_id) REFERENCES users(user_id) )'''
+        msg = '''CREATE TABLE IF NOT EXISTS vocab_lists(list_id integer primary key, list_name text, tags text, list_user_id integer, FOREIGN KEY(list_user_id) REFERENCES users(user_id) )'''
         self.c.execute(msg)
         self.conn.commit()
         return None
@@ -214,12 +215,10 @@ class Collect_Vocab:
     def create_new_list(self):
         print("Name of list: ")
         name = input()
-        print("Language: ")
-        lang = input()
         print("Tags (separated by ;)")
         tags = input()
-        msg = '''INSERT INTO vocab_lists VALUES (NULL, ?,?,?,?) '''
-        t = (name,lang,tags,str(self.user_id))
+        msg = '''INSERT INTO vocab_lists VALUES (NULL, ?,?,?) '''
+        t = (name,tags,str(self.user_id))
         self.c.execute(msg,t)
         self.conn.commit()
         self.curr_list_id = self.get_list_id(name)
@@ -252,17 +251,17 @@ class Collect_Vocab:
         return None
     
     def quiz_flashcard(self):
-        print("Currently in the works!")
+        print("\nCurrently in the works!")
         self.action_word()
         return None
     
     def quiz_multchoice(self):
-        print("Multiple choice quizzing is in the works. Try Flashcards!")
+        print("\nMultiple choice quizzing is in the works. Try Flashcards!")
         self.quiz_flashcard()
         return None
     
     def quiz_fillblank(self):
-        print("Fill-in-the-blank quizzing is in the works. Try Flashcards!")
+        print("\nFill-in-the-blank quizzing is in the works. Try Flashcards!")
         self.quiz_flashcard()
         return None
     
