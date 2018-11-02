@@ -8,4 +8,3 @@ User can create a username and with that username create multiple vocabulary lis
 * extend unittesting to sql functions..
 * create quiz functionality
 * add tag sorting functionality
-* way to see all words in the list

@@ -265,16 +265,34 @@ class Collect_Vocab:
         self.quiz_flashcard()
         return None
     
+    def show_words(self):
+        print("\nWords in this list: ")
+        t = (str(self.curr_list_id))
+        msg = '''SELECT * FROM words WHERE word_list_id=? '''
+        self.c.execute(msg,t)
+        words = self.c.fetchall()
+        for word in words:
+            print("{} : {}".format(word[1],word[2]))
+        self.action_word()
+        return None
+    
     def quiz_wordlist(self):
-        print("\nQuiz:\n1) Flashcards\n2) Multiple Choice\n3) Fill in the blank")
-        quiz_type = int(input("Enter 1, 2, or 3: "))
-        if quiz_type == 1:
-            self.quiz_flashcard()
-        elif quiz_type == 2:
-            self.quiz_multchoice()
-        elif quiz_type == 3:
-            self.quiz_fillblank()
+        print("\nReview:\n1) Flashcards\n2) Multiple Choice\n3) Fill in the blank\n4) View all words and their meanings")
+        quiz_type = input("Enter 1, 2, 3, 4 (or exit): ")
+        if quiz_type.isdigit():
+            if int(quiz_type) == 1:
+                self.quiz_flashcard()
+            elif int(quiz_type) == 2:
+                self.quiz_multchoice()
+            elif int(quiz_type) == 3:
+                self.quiz_fillblank()
+            elif int(quiz_type) == 4:
+                self.show_words()
         else:
-            print("\nPlease enter 1, 2, or 3\n".upper())
-            self.quiz_wordlist()
+            if 'exit' in quiz_type.lower():
+                self.is_user = False
+                self.action_list()
+            else:
+                print("\nPlease enter 1, 2, 3, or 4\n".upper())
+                self.quiz_wordlist()
         return None
