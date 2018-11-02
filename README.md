@@ -5,7 +5,7 @@ My own personal vocabulary collector. Work in progress. Collect words in differe
 User can create a username and with that username create multiple vocabulary lists. The user can add new words with a meaning and tags to those lists. 
 
 ## ToDo:
-* fix new user function - don't want to add user if user already exists
 * extend unittesting to sql functions..
 * create quiz functionality
 * add tag sorting functionality
+* way to see all words in the list
