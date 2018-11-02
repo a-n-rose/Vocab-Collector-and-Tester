@@ -81,7 +81,7 @@ class Collect_Vocab:
         t = (username,)
         self.c.execute('''SELECT * FROM users WHERE username=? ''', t)
         users = self.c.fetchall()
-        print(users)
+        #print(users)
         if len(users) == 1:
             return True, users[0]
         elif len(users) == 0:
@@ -93,7 +93,7 @@ class Collect_Vocab:
         msg = '''SELECT password FROM users WHERE username=? ''' 
         self.c.execute(msg,t)
         real_password = self.c.fetchall()[0][0]
-        print("password = {}\nreal password = {}".format(password, real_password))
+        #print("password = {}\nreal password = {}".format(password, real_password))
         if password == real_password:
             self.is_user = True
             self.username = username
@@ -143,6 +143,7 @@ class Collect_Vocab:
         if action_int.isdigit():
             if int(action_int) == 1:
                 self.add_word()
+                self.action_word()
             elif int(action_int) == 2:
                 self.quiz_wordlist()
             elif int(action_int) == 3:
@@ -180,7 +181,7 @@ class Collect_Vocab:
                 print("\nPlease enter the corresponding number\n".upper())
         if curr_list_id in available_nums:
             self.curr_list_id = curr_list_id
-            print("\nChosen list id is: {}".format(curr_list_id))
+            #print("\nChosen list id is: {}".format(curr_list_id))
         else:
             print("\nPlease choose a corresponding number\n".upper())
             self.choose_list()
@@ -247,7 +248,6 @@ class Collect_Vocab:
         t = (word,meaning,tags,curr_list_id)
         self.c.execute(msg,t)
         self.conn.commit()
-        self.action_word()
         return None
     
     def quiz_flashcard(self):
@@ -271,8 +271,11 @@ class Collect_Vocab:
         msg = '''SELECT * FROM words WHERE word_list_id=? '''
         self.c.execute(msg,t)
         words = self.c.fetchall()
-        for word in words:
-            print("{} : {}".format(word[1],word[2]))
+        if len(words) == 0:
+            print("You haven't entered any words yet.")
+        else:
+            for word in words:
+                print("{} : {}".format(word[1],word[2]))
         self.action_word()
         return None
     
