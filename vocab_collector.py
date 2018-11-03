@@ -1,6 +1,7 @@
 import sqlite3        
 import re
 from errors import ExitApp
+from input_checker import rem_space_specialchar, present_options_collect_response
 
 
 class Collect_Vocab:
@@ -15,7 +16,7 @@ class Collect_Vocab:
     def get_username(self):
         print("\nUsername: ")
         username = input("Spaces and special characters will be removed: ")
-        username = self.prep_input(username)
+        username = rem_space_specialchar(username)
         if username:
             return username
         else:
@@ -26,7 +27,7 @@ class Collect_Vocab:
     def get_password(self):
         print("\nPassword: ")
         password = input("Spaces and special characters will be removed: ")
-        password = self.prep_input(password)
+        password = rem_space_specialchar(password)
         if password:
             return password
         else:
@@ -61,14 +62,6 @@ class Collect_Vocab:
         else:
             logged_in = self.login(username)
         return None
-            
-    def prep_input(self,username):
-        username_checked = ''.join(l for l in username if l.isalnum())
-        if username_checked.isalnum():
-            return username_checked
-        else:
-            print("Not enough alphanumeric characters used. Try again.")
-            return None
         
     def access_users_table(self):
         msg = '''CREATE TABLE IF NOT EXISTS users(user_id integer primary key, username text, password text)'''
@@ -119,12 +112,15 @@ class Collect_Vocab:
         if self.is_user == True:
             print("\nAction:\n1) open existing list\n2) create new list")
             action_int = input("Enter 1 or 2 (or exit): ")
+            action_int = rem_space_specialchar(action_int)
             if action_int.isdigit():
                 if int(action_int) == 1:
                     self.check_lists()
                     self.action_word()
                 elif int(action_int) == 2:
-                    self.create_new_list()
+                    list_name = self.get_item_name()
+                    list_tags = self.get_tags()
+                    self.create_new_list(list_name,list_tags)
                     self.check_lists()
             else:
                 if 'exit' in action_int.lower():
@@ -140,6 +136,7 @@ class Collect_Vocab:
     def action_word(self):
         print("\nAction:\n1) add word\n2) review words \n3) change list")
         action_int = input("Enter 1, 2, 3 (or exit): ")
+        action_int = rem_space_specialchar(action_int)
         if action_int.isdigit():
             if int(action_int) == 1:
                 self.add_word()
@@ -171,6 +168,7 @@ class Collect_Vocab:
             available_nums.append(value)
         print("\nTable of interest: (enter corresponding number) ")
         curr_list_id = input()
+        curr_list_id = rem_space_specialchar(curr_list_id)
         if curr_list_id.isdigit():
             curr_list_id = int(curr_list_id)
         else:
@@ -201,7 +199,7 @@ class Collect_Vocab:
             self.dict_lists = {}
             for list_index in range(len(lists)):
                 name_of_list = lists[list_index][1]
-                self.dict_lists[name_of_list] = list_index+1
+                self.dict_lists[name_of_list] = lists[list_index][0]
             self.choose_list()
         return None
     
@@ -213,16 +211,23 @@ class Collect_Vocab:
         print("list ID = {}".format(list_id))
         return list_id
     
-    def create_new_list(self):
+        list_name, list_tags = self.get_list_info()
+        self.create_new_list(list_name,list_tags)
+    
+    def get_list_info(self):
         print("Name of list: ")
         name = input()
         print("Tags (separated by ;)")
         tags = input()
+        return name, tags
+    
+    def create_new_list(self,name,tags):
         msg = '''INSERT INTO vocab_lists VALUES (NULL, ?,?,?) '''
         t = (name,tags,str(self.user_id))
         self.c.execute(msg,t)
         self.conn.commit()
         self.curr_list_id = self.get_list_id(name)
+        self.curr_list_name = name
         self.action_word()
         return None
         
