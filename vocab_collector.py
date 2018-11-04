@@ -2,6 +2,7 @@ import sqlite3
 import re
 from errors import ExitApp
 from input_manager import rem_space_specialchar, get_word_info, get_list_info
+from wordlist_manager import prep_fill_in_the_blank, test_fill_in_the_blank, rem_word_from_sentence
 
 
 class Collect_Vocab:
@@ -263,15 +264,10 @@ class Collect_Vocab:
         examples = self.c.fetchall()
         self.c.execute(msg2,t)
         words = self.c.fetchall()
-        print("\nWords: \n")
-        for item_index in range(len(words)):
-            print("\nExample sentences with {}:\n".format(words[item_index][0]))
-            ex_list = re.split(';',examples[item_index][0])
-            for sentence in ex_list:
-                if ' ' == sentence[0]:
-                    print('\n{}\n'.format(sentence[1:]))
-                else:
-                    print('\n{}\n'.format(sentence))            
+        word_example_list = prep_fill_in_the_blank(words,examples)
+        word_blank_list = rem_word_from_sentence(word_example_list)
+        score = test_fill_in_the_blank(word_blank_list)
+        print("Great job practicing!\nYour score: {}%".format(score))
         self.action_word()
         return None
     
