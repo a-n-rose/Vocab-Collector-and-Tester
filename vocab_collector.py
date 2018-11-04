@@ -6,7 +6,7 @@ from input_manager import rem_space_specialchar, get_word_info, get_list_info
 
 class Collect_Vocab:
     def __init__(self):
-        self.database = 'vocab_lists'
+        self.database = 'vocab_lists.db'
         self.conn = sqlite3.connect(self.database)
         self.c = self.conn.cursor()
         
@@ -154,34 +154,33 @@ class Collect_Vocab:
         return None
     
     def access_user_vocablists(self):
-        msg = '''CREATE TABLE IF NOT EXISTS vocab_lists(list_id integer primary key, list_name text, tags text, list_user_id integer, FOREIGN KEY(list_user_id) REFERENCES users(user_id) )'''
+        msg = '''CREATE TABLE IF NOT EXISTS vocab_lists(list_id integer primary key, list_name text, list_number int, tags text, list_user_id integer, FOREIGN KEY(list_user_id) REFERENCES users(user_id) )'''
         self.c.execute(msg)
         self.conn.commit()
         return None
     
     def choose_list(self):
         print("\nHere are your lists")
-        available_nums = []
         for key, value in self.dict_lists.items():
-            print(value,'--> ',key)
-            available_nums.append(value)
-        print("\nTable of interest: (enter corresponding number) ")
-        curr_list_id = input()
-        curr_list_id = rem_space_specialchar(curr_list_id)
-        if curr_list_id.isdigit():
-            curr_list_id = int(curr_list_id)
+            print(value[1],'--> ',key)
+        print("\nTable of interest: (enter the corresponding number) ")
+        curr_list_num = input()
+        curr_list_num = rem_space_specialchar(curr_list_num)
+        if curr_list_num.isdigit():
+            curr_list_num = int(curr_list_num)
         else:
-            if 'exit' in curr_list_id.lower():
+            if 'exit' in curr_list_num.lower():
                 self.is_user = False
                 self.action_list()
             else:
                 print("\nPlease enter the corresponding number\n".upper())
-        if curr_list_id in available_nums:
-            self.curr_list_id = curr_list_id
-            #print("\nChosen list id is: {}".format(curr_list_id))
-        else:
-            print("\nPlease choose a corresponding number\n".upper())
-            self.choose_list()
+        for key,value in self.dict_lists.items():
+            if curr_list_num == value[1]:
+                self.curr_list_id = value[0]
+                print("The current list ID is: {}".format(self.curr_list_id))
+            else:
+                print("\nPlease choose a corresponding number\n".upper())
+                self.choose_list()
         return None
     
     def coll_user_vocab_lists(self):
@@ -196,13 +195,14 @@ class Collect_Vocab:
         lists = self.coll_user_vocab_lists()
         if len(lists) == 0:
             print("It looks like you don't have a list. Start one now!")
-            self.create_new_list()
+            name,tags = get_list_info()
+            self.create_new_list(name,tags)
             self.check_lists()
         else:
             self.dict_lists = {}
             for list_index in range(len(lists)):
                 name_of_list = lists[list_index][1]
-                self.dict_lists[name_of_list] = lists[list_index][0]
+                self.dict_lists[name_of_list] = (lists[list_index][0],lists[list_index][2])
             self.choose_list()
         return None
     
@@ -214,8 +214,10 @@ class Collect_Vocab:
         return list_id
     
     def create_new_list(self,name,tags):
-        msg = '''INSERT INTO vocab_lists VALUES (NULL, ?,?,?) '''
-        t = (name,tags,str(self.user_id))
+        lists = self.coll_user_vocab_lists()
+        list_num = len(lists)+1
+        msg = '''INSERT INTO vocab_lists VALUES (NULL, ?,?,?,?) '''
+        t = (name,list_num,tags,str(self.user_id))
         self.c.execute(msg,t)
         self.conn.commit()
         self.curr_list_id = self.get_list_id(name)
@@ -273,6 +275,8 @@ class Collect_Vocab:
         return None
     
     def quiz_wordlist(self):
+        #create word table just in case one doesn't exist yet
+        self.access_word_table()
         print("\nReview:\n1) Flashcards\n2) Multiple Choice\n3) Fill in the blank\n4) View all words and their meanings")
         quiz_type = input("Enter 1, 2, 3, 4 (or exit): ")
         if quiz_type.isdigit():
