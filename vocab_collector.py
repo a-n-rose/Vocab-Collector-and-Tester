@@ -1,7 +1,7 @@
 import sqlite3        
 import re
 from errors import ExitApp
-from input_checker import rem_space_specialchar, present_options_collect_response
+from input_manager import rem_space_specialchar, get_word_info, get_list_info
 
 
 class Collect_Vocab:
@@ -118,8 +118,7 @@ class Collect_Vocab:
                     self.check_lists()
                     self.action_word()
                 elif int(action_int) == 2:
-                    list_name = self.get_item_name()
-                    list_tags = self.get_tags()
+                    list_name,list_tags = get_list_info()
                     self.create_new_list(list_name,list_tags)
                     self.check_lists()
             else:
@@ -185,12 +184,16 @@ class Collect_Vocab:
             self.choose_list()
         return None
     
-    def check_lists(self):
+    def coll_user_vocab_lists(self):
         self.access_user_vocablists()
         t = (str(self.user_id),)
         msg = '''SELECT * FROM vocab_lists WHERE list_user_id=? ''' 
         self.c.execute(msg, t)
         lists = self.c.fetchall()
+        return lists
+    
+    def check_lists(self):
+        lists = self.coll_user_vocab_lists()
         if len(lists) == 0:
             print("It looks like you don't have a list. Start one now!")
             self.create_new_list()
@@ -208,18 +211,7 @@ class Collect_Vocab:
         msg = '''SELECT list_id FROM vocab_lists WHERE list_name=? '''
         self.c.execute(msg,t)
         list_id = self.c.fetchall()[0][0]
-        print("list ID = {}".format(list_id))
         return list_id
-    
-        list_name, list_tags = self.get_list_info()
-        self.create_new_list(list_name,list_tags)
-    
-    def get_list_info(self):
-        print("Name of list: ")
-        name = input()
-        print("Tags (separated by ;)")
-        tags = input()
-        return name, tags
     
     def create_new_list(self,name,tags):
         msg = '''INSERT INTO vocab_lists VALUES (NULL, ?,?,?) '''
@@ -237,14 +229,10 @@ class Collect_Vocab:
         self.conn.commit()
         return None
     
+    
     def add_word(self):
         self.access_word_table()
-        print("New word: ")
-        word = input()
-        print("Meaning: ")
-        meaning = input()
-        print("Tags (separated by ;)")
-        tags = input()
+        word,meaning,tags = get_word_info()
         msg = '''INSERT INTO words VALUES (NULL, ?,?,?,?) '''
         if isinstance(self.curr_list_id,int):
             curr_list_id = str(self.curr_list_id)
