@@ -226,7 +226,7 @@ class Collect_Vocab:
         return None
         
     def access_word_table(self):
-        msg = '''CREATE TABLE IF NOT EXISTS words(word_id integer primary key, word text, meaning text, tags text, word_list_id integer, FOREIGN KEY(word_list_id) REFERENCES vocab_lists(list_id)) '''
+        msg = '''CREATE TABLE IF NOT EXISTS words(word_id integer primary key, word text, meaning text, example_sentence text, tags text, word_list_id integer, FOREIGN KEY(word_list_id) REFERENCES vocab_lists(list_id)) '''
         self.c.execute(msg)
         self.conn.commit()
         return None
@@ -234,13 +234,13 @@ class Collect_Vocab:
     
     def add_word(self):
         self.access_word_table()
-        word,meaning,tags = get_word_info()
-        msg = '''INSERT INTO words VALUES (NULL, ?,?,?,?) '''
+        word,meaning,example,tags = get_word_info()
+        msg = '''INSERT INTO words VALUES (NULL, ?,?,?,?,?) '''
         if isinstance(self.curr_list_id,int):
             curr_list_id = str(self.curr_list_id)
         else:
             curr_list_id = self.curr_list_id
-        t = (word,meaning,tags,curr_list_id)
+        t = (word,meaning,example,tags,curr_list_id)
         self.c.execute(msg,t)
         self.conn.commit()
         return None
@@ -256,8 +256,24 @@ class Collect_Vocab:
         return None
     
     def quiz_fillblank(self):
-        print("\nFill-in-the-blank quizzing is in the works. Try Flashcards!")
-        self.quiz_flashcard()
+        t = (str(self.curr_list_id))
+        msg1 = '''SELECT example_sentence FROM words WHERE word_list_id=? '''
+        msg2 = '''SELECT word FROM words WHERE word_list_id=? '''
+        self.c.execute(msg1,t)
+        examples = self.c.fetchall()
+        self.c.execute(msg2,t)
+        words = self.c.fetchall()
+        print("\nWords: \n")
+        for item_index in range(len(words)):
+            print("\nExample sentences with {}:\n".format(words[item_index][0]))
+            ex_list = re.split(';',examples[item_index][0])
+            for sentence in ex_list:
+                if ' ' == sentence[0]:
+                    print('\n{}\n'.format(sentence[1:]))
+                else:
+                    print('\n{}\n'.format(sentence))            
+    
+        self.action_word()
         return None
     
     def show_words(self):
