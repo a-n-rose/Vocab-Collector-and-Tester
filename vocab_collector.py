@@ -272,7 +272,6 @@ class Collect_Vocab:
                     print('\n{}\n'.format(sentence[1:]))
                 else:
                     print('\n{}\n'.format(sentence))            
-    
         self.action_word()
         return None
     
