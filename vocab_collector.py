@@ -178,10 +178,11 @@ class Collect_Vocab:
         for key,value in self.dict_lists.items():
             if curr_list_num == value[1]:
                 self.curr_list_id = value[0]
-                print("The current list ID is: {}".format(self.curr_list_id))
-            else:
-                print("\nPlease choose a corresponding number\n".upper())
-                self.choose_list()
+                #print("The current list ID is: {}".format(self.curr_list_id))
+                return None
+        else:
+            print("\nPlease choose a corresponding number\n".upper())
+            self.choose_list()
         return None
     
     def coll_user_vocab_lists(self):
