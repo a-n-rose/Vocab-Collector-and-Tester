@@ -2,7 +2,7 @@ import sqlite3
 import re
 from errors import ExitApp
 from input_manager import rem_space_specialchar, get_word_info, get_list_info
-from wordlist_manager import prep_fill_in_the_blank, test_fill_in_the_blank, rem_word_from_sentence
+from wordlist_manager import prep_fill_in_the_blank, test_fill_in_the_blank,  rem_word_from_sentence, test_flashcards, show_score
 
 
 class Collect_Vocab:
@@ -248,7 +248,13 @@ class Collect_Vocab:
         return None
     
     def quiz_flashcard(self):
-        print("\nCurrently in the works!")
+        t = (str(self.curr_list_id))
+        msg = '''SELECT word, meaning from words WHERE word_list_id=? '''
+        self.c.execute(msg,t)
+        word_meaning_data = self.c.fetchall()
+        #print(word_meaning_data)
+        score = test_flashcards(word_meaning_data)
+        show_score(score)
         self.action_word()
         return None
     
@@ -268,7 +274,7 @@ class Collect_Vocab:
         word_example_list = prep_fill_in_the_blank(words,examples)
         word_blank_list = rem_word_from_sentence(word_example_list)
         score = test_fill_in_the_blank(word_blank_list)
-        print("Great job practicing!\nYour score: {}%".format(score))
+        show_score(score)
         self.action_word()
         return None
     
