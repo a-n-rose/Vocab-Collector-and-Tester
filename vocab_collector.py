@@ -27,14 +27,8 @@ class Collect_Vocab:
     
     def get_password(self):
         print("\nPassword: ")
-        password = input("Spaces and special characters will be removed: ")
-        password = rem_space_specialchar(password)
-        if password:
-            return password
-        else:
-            print("Not enough alphanumeric characters used. Try again.")
-            self.get_password()
-        return None
+        password = input()
+        return password
     
     def login(self,username):
         print("\nWelcome back {}! Enter your password to access your lists.".format(username))
@@ -59,6 +53,7 @@ class Collect_Vocab:
         username = self.get_username()
         exist, user_id = self.check_if_user_exists(username)
         if exist == False:
+            print("\nYour username will be saved as '{}'".format(username))
             logged_in = self.register(username)
         else:
             logged_in = self.login(username)
