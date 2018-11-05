@@ -265,13 +265,11 @@ class Collect_Vocab:
     
     def quiz_fillblank(self):
         t = (str(self.curr_list_id))
-        msg1 = '''SELECT example_sentence FROM words WHERE word_list_id=? '''
-        msg2 = '''SELECT word FROM words WHERE word_list_id=? '''
-        self.c.execute(msg1,t)
-        examples = self.c.fetchall()
-        self.c.execute(msg2,t)
-        words = self.c.fetchall()
-        word_example_list = prep_fill_in_the_blank(words,examples)
+        msg = '''SELECT word, example_sentence FROM words WHERE word_list_id=? '''
+        self.c.execute(msg,t)
+        words_examples = self.c.fetchall()
+        word_example_list = prep_fill_in_the_blank(words_examples)
+        print(word_example_list)
         word_blank_list = rem_word_from_sentence(word_example_list)
         score = test_fill_in_the_blank(word_blank_list)
         show_score(score)

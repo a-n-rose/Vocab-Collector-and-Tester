@@ -1,14 +1,14 @@
 import re
 import numpy as np
 
-def prep_fill_in_the_blank(wordtuple_list,exampletuple_list):
+def prep_fill_in_the_blank(wordexample_tuple_list):
     '''
     Saves examples and corresponding word value in tuple
     '''
     word_example_list = []
-    for item_index in range(len(wordtuple_list)):
-        word = wordtuple_list[item_index][0]
-        ex_list = re.split(';',exampletuple_list[item_index][0])
+    for item_index in range(len(wordexample_tuple_list)):
+        word = wordexample_tuple_list[item_index][0]
+        ex_list = re.split(';',wordexample_tuple_list[item_index][1])
         word_example_list.append((word,ex_list))
     return word_example_list
     
