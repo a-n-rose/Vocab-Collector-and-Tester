@@ -16,3 +16,4 @@ The user can:
 * further separate/organize functions --> apply test to them
 * improve quiz functionality (account for the complexities of language)
 * add tag sorting functionality
+* add columns in databases for 'last tested' and 'performance'. --> can create lists based on words/lists with poor performance
