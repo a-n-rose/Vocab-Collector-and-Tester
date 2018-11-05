@@ -284,10 +284,10 @@ class Collect_Vocab:
         self.c.execute(msg,t)
         words_examples = self.c.fetchall()
         word_example_list = prep_fill_in_the_blank(words_examples)
-        print(word_example_list)
         word_blank_list = rem_word_from_sentence(word_example_list)
         score = test_fill_in_the_blank(word_blank_list)
-        show_score(score)
+        if score != None:
+            show_score(score)
         self.action_word()
         return None
     

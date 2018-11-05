@@ -49,21 +49,25 @@ def get_total_score(points,total_points_possible):
 def test_fill_in_the_blank(word_example_list):
     points = 0
     count = 0
-    for word_set in word_example_list:
-        word = word_set[0]
-        num_ex = len(word_set[1])
-        rand_index = np.random.randint(low=0,high=num_ex)
-        test_ex = word_set[1][rand_index]
-        response = get_response_fill_in_the_blank(word,test_ex)
-        if response != None:
-            success = check_response_quiz(word,response)
-            if success:
-                points += 1
-                print("\nWay to go!\n")
-            else:
-                print("\nHmmmmm.. not exactly. Let's try the next word.\n")
-            count += 1
-    score = get_total_score(points,count)
+    if len(word_example_list) > 0:
+        for word_set in word_example_list:
+            word = word_set[0]
+            num_ex = len(word_set[1])
+            rand_index = np.random.randint(low=0,high=num_ex)
+            test_ex = word_set[1][rand_index]
+            response = get_response_fill_in_the_blank(word,test_ex)
+            if response != None:
+                success = check_response_quiz(word,response)
+                if success:
+                    points += 1
+                    print("\nWay to go!\n")
+                else:
+                    print("\nHmmmmm.. not exactly. Let's try the next word.\n")
+                count += 1
+        score = get_total_score(points,count)
+    else:
+        print("No example sentences were found. Try another quiz!")
+        return None
     return score
 
 def get_response_flashcard(wordmeaning_tuple):
