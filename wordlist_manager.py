@@ -1,5 +1,6 @@
 import re
 import numpy as np
+import random
 
 def prep_fill_in_the_blank(wordexample_tuple_list):
     '''
@@ -105,4 +106,71 @@ def show_score(score):
         msg = "Perfect score! I think you gotta find some harder words."
     print("\nYour score: {}% \n{}".format(score,msg))
     return None
-        
+
+
+def prep_multchoicedict(wordmeaning_tuple,possible_meanings_list):
+    #select at random wrong meanings for the target word
+    list_target_removed = possible_meanings_list.copy()
+    list_target_removed.remove(wordmeaning_tuple[1])
+    if len(list_target_removed) < 3:
+        rand_indices = random.sample(range(len(list_target_removed)),len(list_target_removed))
+    else:
+        rand_indices = random.sample(range(len(list_target_removed)),3)
+    wrong_options = [list_target_removed[j] for j in rand_indices]
+    
+    #choose the answer index at random:
+    goal_len = len(wrong_options)+1
+    answer_index = random.choice(random.sample(range(goal_len),1))
+    
+    #prep dictionary for presenting multiple choice question
+    dict_options = {}
+    for i in range(goal_len):
+        if i == answer_index:
+            dict_options[str(i+1)] = (wordmeaning_tuple[1],True)
+        else:
+            if len(wrong_options) > 0:
+                dict_options[str(i+1)] = (wrong_options[0],False)
+                wrong_options.remove(wrong_options[0])
+            else:
+                print("Hmmmm something funny happened while making the multiple choice dict.")
+    return dict_options
+
+
+def get_response_multiplechoice(wordmeaning_tuple,possible_meanings_list):
+    print("\nWhich of the meanings below (enter the corresponding number) best matches this word: \n\n{}\n".format(wordmeaning_tuple[0]))
+    options_dict = prep_multchoicedict(wordmeaning_tuple,possible_meanings_list)
+    for key, value in options_dict.items():
+        print("{} --> {}\n".format(key,value[0]))
+    response = input()
+    if 'exit' in response.lower():
+        return None
+    if response.isdigit():
+        if int(response) <= len(options_dict):
+            success = options_dict[response][1]
+            if success:
+                print("\nGreat job!\n")
+            else:
+                print("\nThe correct meaning was: {}\n".format(wordmeaning_tuple[1]))
+            return success
+        else:
+            print("Please choose the corresponding number")
+            get_response_multiplechoice(wordmeaning_tuple,possible_meanings_list)
+    return None
+
+def test_multiplechoice(word_meaning_list):
+    points = 0
+    count = 0
+    possible_meanings = []
+    for pair in word_meaning_list:
+        possible_meanings.append(pair[1])
+    for pair in word_meaning_list:
+        success = get_response_multiplechoice(pair,possible_meanings)
+        if success != None:
+            if success == True:
+                points += 1
+                count += 1
+            else:
+                count += 1
+    score = get_total_score(points,count)
+    return score
+                
