@@ -21,7 +21,6 @@ quiz options
 '''
 
 from vocab_collector import Collect_Vocab
-from input_functions import get_username
 import traceback
 from errors import ExitApp
 
