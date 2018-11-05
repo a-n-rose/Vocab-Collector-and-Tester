@@ -1,5 +1,5 @@
 # Vocab-Collector-and-Tester
-My own personal vocabulary collector. Work in progress. Collect words in different languages in different lists.  Create quizes w write-in options, multiple choice, "flashcards".
+My own personal vocabulary collector. Work in progress. Collect words in different languages in different lists. These are saved to a database via SQLite3.  Create quizes w write-in options, multiple choice, "flashcards".
 
 ## To Run:
 Installations: 
