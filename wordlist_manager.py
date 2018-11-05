@@ -19,9 +19,9 @@ def rem_word_from_sentence(word_example_list):
         blank_sentences = []
         for sentence in word_set[1]:
             if sentence != ' ':
-                if word_set[0] in sentence.lower():
+                if word_set[0].lower() in sentence.lower():
                     blank = '_'*len(word_set[0])
-                    sentence = sentence.lower().replace(word_set[0],blank)
+                    sentence = sentence.lower().replace(word_set[0].lower(),blank)
                     blank_sentences.append(sentence)
         word_blank_list.append((word_set[0],blank_sentences))
     return word_blank_list
