@@ -18,6 +18,8 @@ class Collect_Vocab:
         print("\nUsername: ")
         username = input("Spaces and special characters will be removed: ")
         username = rem_space_specialchar(username)
+        if 'exit' == username.lower():
+            raise ExitApp("Aw man. I didn't even catch your name. Come back soon!") 
         if username:
             return username
         else:
@@ -31,8 +33,10 @@ class Collect_Vocab:
         return password
     
     def login(self,username):
-        print("\nWelcome back {}! Enter your password to access your lists.".format(username))
+        print("\nEnter your password to access your lists.\n")
         password = self.get_password()
+        if 'exit' == password.lower():
+            raise ExitApp("Aw man. You're leaving already? Come back soon!") 
         if password:
             self.check_password(username, password)
             if self.is_user == True:
@@ -56,7 +60,11 @@ class Collect_Vocab:
             print("\nYour username will be saved as '{}'".format(username))
             logged_in = self.register(username)
         else:
+            print("\nWelcome back {}! \n".format(username))
             logged_in = self.login(username)
+            if logged_in == False:
+                print("Either the password is incorrect or the username is taken. Please try again.")
+                self.sign_in()
         return None
         
     def access_users_table(self):
@@ -91,6 +99,11 @@ class Collect_Vocab:
             self.is_user = False
         return None
         
+    def get_info(self):
+        msg = "\nFor each list of words you create, you can add tags and example sentences.\n\nYou can even test your knowledge with flashcards, multiple choice and fill-in-the-blank quizzes.\n"
+        print(msg)
+        return None
+        
     def add_user(self,username,password):
         self.username = username
         t = (username,password,)
@@ -98,7 +111,9 @@ class Collect_Vocab:
         self.c.execute(msg,t)
         self.conn.commit()
         self.is_user, self.user_id = self.check_if_user_exists(username)
-        print("\nWelcome {}! We're glad you're here.\n".format(username))
+        print("\nYou're account has been created.\nGet started by creating your first list.\n")
+        self.get_info()
+        
         return None
     
     
