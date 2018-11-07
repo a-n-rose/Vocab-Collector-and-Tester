@@ -38,6 +38,7 @@ class TestUserVocabDatabase(unittest.TestCase):
         user1 = ('1','Stacey','sailboat')
         user2 = ('2','Freddy','fidgetspinner')
         
+        
         #list name can also be included in 'tag search'
         user1_vocablist1 = ('1','German','1','every-day; beginner','1')
         user1_vocablist2 = ('4','Body Parts','2','German;intermediate','1')
@@ -89,6 +90,10 @@ class TestUserVocabDatabase(unittest.TestCase):
             self.db.conn.close()
         os.remove("test_vocab.db")
         
+        
+        
+    ##### TESTS FOR ESTABLISHING AND CHECKING USERNAME AND PASSWORD #####
+
     def test_check_password_correct(self):
         username = 'Stacey'
         password = 'sailboat'
@@ -112,6 +117,13 @@ class TestUserVocabDatabase(unittest.TestCase):
         password = 'JoJo'
         self.assertEqual(self.db.add_user(username,password),None)
         self.assertEqual(self.db.check_if_user_exists(username),(True,3))
+    
+    ##### TESTS FOR ACTIONS WITH VOCAB LISTS #####
+    
+    def test_coll_user_vocab_lists_full(self):
+        self.db.user_id = 1
+        self.assertEqual(self.db.coll_user_vocab_lists(),[(1,'German',1,'every-day; beginner',1),(4,'Body Parts',2,'German;intermediate',1)])
+    
     
 if __name__ == '__main__':
     unittest.main()
