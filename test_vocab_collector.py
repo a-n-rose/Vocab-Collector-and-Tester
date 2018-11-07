@@ -175,9 +175,14 @@ class TestUserVocabDatabase(unittest.TestCase):
         meaning = 'toe'
         example = "Eine Zehe von meinem linken Fuß ist blau geworden; Die zehn Zehen von Baby Füßchen sind super klein und so süß vergleicht mit den von erwachsenen Füßen."
         tags = 'German; intermediate; funny; body; small'
-        self.assertEqual(self.db.get_words(),[])
+        self.assertEqual(self.db.coll_word_meanings(),[])
         self.assertEqual(self.db.add_word(word,meaning,example,tags),None)
-        self.assertEqual(self.db.get_words(),[(10,'Zehe','toe',"Eine Zehe von meinem linken Fuß ist blau geworden; Die zehn Zehen von Baby Füßchen sind super klein und so süß vergleicht mit den von erwachsenen Füßen.",'German; intermediate; funny; body; small',4)])
+        self.assertEqual(self.db.coll_word_meanings(),[('Zehe','toe')])
+
+
+
+
+    ##### TESTS FOR FUNCTIONS RELATED TO QUIZZING #####
 
     def test_coll_word_meanings(self):
         self.db.curr_list_id = 2
@@ -189,6 +194,8 @@ class TestUserVocabDatabase(unittest.TestCase):
         points = 40
         total_points_possible = 65
         self.assertEqual(wordlist_manager.get_total_score(points,total_points_possible),goal_score)
+        
+    
         
     
     def test_prep_fill_in_the_blank(self):
