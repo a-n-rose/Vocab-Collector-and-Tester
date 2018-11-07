@@ -196,7 +196,9 @@ class TestUserVocabDatabase(unittest.TestCase):
         total_points_possible = 65
         self.assertEqual(wordlist_manager.get_total_score(points,total_points_possible),goal_score)
         
-    
+    def test_get_possible_choices(self):
+        word_meanings_pairs = [('bleu','blue'),('jaune','yellow'),('rouge','red')]
+        self.assertEqual(wordlist_manager.get_possible_choices(word_meanings_pairs),['blue','yellow','red'])
         
     
     def test_prep_fill_in_the_blank(self):
