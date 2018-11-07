@@ -146,7 +146,8 @@ class Collect_Vocab:
         action_int = rem_space_specialchar(action_int)
         if action_int.isdigit():
             if int(action_int) == 1:
-                self.add_word()
+                word,meaning,example,tags = get_word_info()
+                self.add_word(word,meaning,example,tags)
                 self.action_word()
             elif int(action_int) == 2:
                 self.quiz_wordlist()
@@ -239,9 +240,8 @@ class Collect_Vocab:
         return None
     
     
-    def add_word(self):
+    def add_word(self,word,meaning,example,tags):
         self.access_word_table()
-        word,meaning,example,tags = get_word_info()
         msg = '''INSERT INTO words VALUES (NULL, ?,?,?,?,?) '''
         if isinstance(self.curr_list_id,int):
             curr_list_id = str(self.curr_list_id)
@@ -294,12 +294,16 @@ class Collect_Vocab:
         self.action_word()
         return None
     
-    def show_words(self):
-        print("\nWords in this list: ")
+    def get_words(self):
         t = (str(self.curr_list_id))
         msg = '''SELECT * FROM words WHERE word_list_id=? '''
         self.c.execute(msg,t)
         words = self.c.fetchall()
+        return words
+    
+    def show_words(self):
+        words = self.get_words()
+        print("\nWords in this list: ")
         if len(words) == 0:
             print("You haven't entered any words yet.")
         else:
