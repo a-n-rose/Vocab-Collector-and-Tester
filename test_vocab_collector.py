@@ -3,8 +3,7 @@ import sqlite3
 import unittest
 
 
-#module with my functions:
-#import vocab_collector
+#import class from module with my functions:
 from vocab_collector import Collect_Vocab
 
 class TestUserVocabDatabase(unittest.TestCase):
