@@ -124,6 +124,9 @@ class TestUserVocabDatabase(unittest.TestCase):
         self.db.user_id = 1
         self.assertEqual(self.db.coll_user_vocab_lists(),[(1,'German',1,'every-day; beginner',1),(4,'Body Parts',2,'German;intermediate',1)])
     
+    def test_coll_user_vocab_lists_empty(self):
+        self.db.user_id = 3
+        self.assertEqual(self.db.coll_user_vocab_lists(),[])
     
 if __name__ == '__main__':
     unittest.main()
