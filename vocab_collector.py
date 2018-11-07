@@ -302,7 +302,7 @@ class Collect_Vocab:
             print("You haven't entered any words yet.")
         else:
             for word in word_meaning_data:
-                print("{} : {}".format(word_meaning_data[0],word_meaning_data[1]))
+                print("{} : {}".format(word[0],word[1]))
         self.action_word()
         return None
     
