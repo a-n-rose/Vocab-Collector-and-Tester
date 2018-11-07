@@ -13,16 +13,17 @@ def prep_fill_in_the_blank(wordexample_tuple_list):
         word_example_list.append((word,ex_list))
     return word_example_list
     
+#Needs to be adapted to handle more complexities of language
 def rem_word_from_sentence(word_example_list):
     word_blank_list = []
     for word_set in word_example_list:
         blank_sentences = []
         for sentence in word_set[1]:
-            if sentence != ' ':
+            if sentence != '':
                 if word_set[0].lower() in sentence.lower():
                     blank = '_'*len(word_set[0])
                     sentence = sentence.lower().replace(word_set[0].lower(),blank)
-                    blank_sentences.append(sentence)
+                blank_sentences.append(sentence)
         word_blank_list.append((word_set[0],blank_sentences))
     return word_blank_list
 
@@ -50,9 +51,11 @@ def test_fill_in_the_blank(word_example_list):
     points = 0
     count = 0
     if len(word_example_list) > 0:
+        print(word_example_list)
         for word_set in word_example_list:
             word = word_set[0]
             num_ex = len(word_set[1])
+            print(word_set[1])
             rand_index = np.random.randint(low=0,high=num_ex)
             test_ex = word_set[1][rand_index]
             response = get_response_fill_in_the_blank(word,test_ex)
@@ -110,6 +113,7 @@ def show_score(score):
         msg = "Perfect score! I think you gotta find some harder words."
     print("\nYour score: {}% \n{}".format(score,msg))
     return None
+
 
 
 def prep_multchoicedict(wordmeaning_tuple,possible_meanings_list):
@@ -171,7 +175,7 @@ def get_possible_choices(word_meaning_list):
 def test_multiplechoice(word_meaning_list):
     points = 0
     count = 0
-    word_meaning_list = get_possible_choices(word_meaning_list)
+    possible_meanings = get_possible_choices(word_meaning_list)
     for pair in word_meaning_list:
         success = get_response_multiplechoice(pair,possible_meanings)
         if success != None:
