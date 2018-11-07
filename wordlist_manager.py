@@ -161,12 +161,17 @@ def get_response_multiplechoice(wordmeaning_tuple,possible_meanings_list):
             get_response_multiplechoice(wordmeaning_tuple,possible_meanings_list)
     return None
 
-def test_multiplechoice(word_meaning_list):
-    points = 0
-    count = 0
+def get_possible_choices(word_meaning_list):
     possible_meanings = []
     for pair in word_meaning_list:
         possible_meanings.append(pair[1])
+    return possible_meanings
+        
+
+def test_multiplechoice(word_meaning_list):
+    points = 0
+    count = 0
+    word_meaning_list = get_possible_choices(word_meaning_list)
     for pair in word_meaning_list:
         success = get_response_multiplechoice(pair,possible_meanings)
         if success != None:
