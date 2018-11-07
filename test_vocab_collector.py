@@ -138,6 +138,17 @@ class TestUserVocabDatabase(unittest.TestCase):
         self.db.user_id = 2
         self.assertEqual(self.db.create_new_list(list_name,tags),None)
         self.assertEqual(self.db.coll_user_vocab_lists(),[(2,'Colors',1,'French;colors; beginner',2),(3,'Colors',2,'Arabic;colors; beginner',2),(5,'Colors',3,'Spanish; colors; easy',2)])
+        
+    def test_add_word(self):
+        self.db.user_id = 1
+        self.db.curr_list_id=4
+        word = 'Zehe'
+        meaning = 'toe'
+        example = "Eine Zehe von meinem linken Fuß ist blau geworden; Die zehn Zehen von Baby Füßchen sind super klein und so süß vergleicht mit den von erwachsenen Füßen."
+        tags = 'German; intermediate; funny; body; small'
+        self.assertEqual(self.db.get_words(),[])
+        self.assertEqual(self.db.add_word(word,meaning,example,tags),None)
+        self.assertEqual(self.db.get_words(),[(10,'Zehe','toe',"Eine Zehe von meinem linken Fuß ist blau geworden; Die zehn Zehen von Baby Füßchen sind super klein und so süß vergleicht mit den von erwachsenen Füßen.",'German; intermediate; funny; body; small',4)])
     
 if __name__ == '__main__':
     unittest.main()
