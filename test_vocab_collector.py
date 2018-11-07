@@ -165,6 +165,7 @@ class TestUserVocabDatabase(unittest.TestCase):
         list_name = 'Colors'
         tags = 'Spanish; colors; easy'
         self.db.user_id = 2
+        self.assertEqual(self.db.coll_user_vocab_lists(),[(2,'Colors',1,'French;colors; beginner',2),(3,'Colors',2,'Arabic;colors; beginner',2)])
         self.assertEqual(self.db.create_new_list(list_name,tags),None)
         self.assertEqual(self.db.coll_user_vocab_lists(),[(2,'Colors',1,'French;colors; beginner',2),(3,'Colors',2,'Arabic;colors; beginner',2),(5,'Colors',3,'Spanish; colors; easy',2)])
         
