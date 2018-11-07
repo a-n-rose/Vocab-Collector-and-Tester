@@ -6,8 +6,8 @@ from wordlist_manager import prep_fill_in_the_blank, test_fill_in_the_blank,  re
 
 
 class Collect_Vocab:
-    def __init__(self):
-        self.database = 'vocab_lists.db'
+    def __init__(self,database):
+        self.database = database
         self.conn = sqlite3.connect(self.database)
         self.c = self.conn.cursor()
         
@@ -38,11 +38,9 @@ class Collect_Vocab:
         if 'exit' == password.lower():
             raise ExitApp("Aw man. You're leaving already? Come back soon!") 
         if password:
-            self.check_password(username, password)
-            if self.is_user == True:
-                return True
-            else:
-                return False
+            match = self.check_password(username, password)
+            return match
+        return None
         
     def register(self,username):
         print("\nWelcome {}! Enter a password to create your account".format(username))
@@ -95,9 +93,10 @@ class Collect_Vocab:
             self.is_user = True
             self.username = username
             _, self.user_id = self.check_if_user_exists(username)
+            return True
         else:
             self.is_user = False
-        return None
+        return False
         
     def get_info(self):
         msg = "\nFor each list of words you create, you can add tags and example sentences.\n\nYou can even test your knowledge with flashcards, multiple choice and fill-in-the-blank quizzes.\n"
