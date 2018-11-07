@@ -38,7 +38,6 @@ class TestUserVocabDatabase(unittest.TestCase):
         user1 = ('1','Stacey','sailboat')
         user2 = ('2','Freddy','fidgetspinner')
         
-        
         #list name can also be included in 'tag search'
         user1_vocablist1 = ('1','German','1','every-day; beginner','1')
         user1_vocablist2 = ('4','Body Parts','2','German;intermediate','1')
@@ -132,6 +131,13 @@ class TestUserVocabDatabase(unittest.TestCase):
         list_name = 'Colors'
         tags = 'French;colors; beginner'
         self.assertEqual(self.db.get_list_id(list_name,tags),2)
+        
+    def test_create_new_list(self):
+        list_name = 'Colors'
+        tags = 'Spanish; colors; easy'
+        self.db.user_id = 2
+        self.assertEqual(self.db.create_new_list(list_name,tags),None)
+        self.assertEqual(self.db.coll_user_vocab_lists(),[(2,'Colors',1,'French;colors; beginner',2),(3,'Colors',2,'Arabic;colors; beginner',2),(5,'Colors',3,'Spanish; colors; easy',2)])
     
 if __name__ == '__main__':
     unittest.main()
