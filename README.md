@@ -35,7 +35,7 @@ So far I only need to install Numpy
 
 ### Run Main Module
 ```
-$ python3 vocab_run.py 
+(env)...$ python3 vocab_run.py 
 ```
 
 The main menu is 'action_list' which asks the user if they would like to start a new list or look at an already created list. If there is no list yet created, the user is prompted to create one. Each list has a name and tags the user can specify.
