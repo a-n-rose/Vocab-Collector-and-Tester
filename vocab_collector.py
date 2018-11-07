@@ -217,9 +217,9 @@ class Collect_Vocab:
             self.choose_list()
         return None
     
-    def get_list_id(self,list_name):
-        t = (list_name,)
-        msg = '''SELECT list_id FROM vocab_lists WHERE list_name=? '''
+    def get_list_id(self,list_name,tags):
+        t = (list_name,tags)
+        msg = '''SELECT list_id FROM vocab_lists WHERE list_name=? AND tags=? '''
         self.c.execute(msg,t)
         list_id = self.c.fetchall()[0][0]
         return list_id
@@ -231,7 +231,7 @@ class Collect_Vocab:
         t = (name,list_num,tags,str(self.user_id))
         self.c.execute(msg,t)
         self.conn.commit()
-        self.curr_list_id = self.get_list_id(name)
+        self.curr_list_id = self.get_list_id(name,tags)
         self.curr_list_name = name
         self.action_word()
         return None
