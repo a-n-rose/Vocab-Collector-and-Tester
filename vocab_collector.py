@@ -130,7 +130,8 @@ class Collect_Vocab:
                 elif int(action_int) == 2:
                     list_name,list_tags = get_list_info()
                     self.create_new_list(list_name,list_tags)
-                    self.check_lists()
+                    self.action_word()
+                    #self.check_lists()
             else:
                 if 'exit' in action_int.lower():
                     self.is_user = False
@@ -208,7 +209,8 @@ class Collect_Vocab:
             print("It looks like you don't have a list. Start one now!")
             name,tags = get_list_info()
             self.create_new_list(name,tags)
-            self.check_lists()
+            self.action_word()
+            #self.check_lists()
         else:
             self.dict_lists = {}
             for list_index in range(len(lists)):
@@ -233,7 +235,6 @@ class Collect_Vocab:
         self.conn.commit()
         self.curr_list_id = self.get_list_id(name,tags)
         self.curr_list_name = name
-        self.action_word()
         return None
         
     def access_word_table(self):
@@ -262,6 +263,9 @@ class Collect_Vocab:
         self.c.execute(msg,t)
         word_meaning_data = self.c.fetchall()
         #print(word_meaning_data)
+        if len(word_meaning_data) == 0:
+            print("\nNo word meanings found.\n")
+            return None
         score = test_flashcards(word_meaning_data)
         show_score(score)
         self.action_word()
@@ -272,6 +276,9 @@ class Collect_Vocab:
         msg = '''SELECT word, meaning from words WHERE word_list_id=? '''
         self.c.execute(msg,t)
         word_meaning_data = self.c.fetchall()
+        if len(word_meaning_data) == 0:
+            print("\nNo word meanings found.\n")
+            return None
         score = test_multiplechoice(word_meaning_data)
         show_score(score)
         self.action_word()
@@ -282,6 +289,9 @@ class Collect_Vocab:
         msg = '''SELECT word, example_sentence FROM words WHERE word_list_id=? '''
         self.c.execute(msg,t)
         words_examples = self.c.fetchall()
+        if len(words_examples) == 0:
+            print("\nNo example sentences found.\n")
+            return None
         word_example_list = prep_fill_in_the_blank(words_examples)
         word_blank_list = rem_word_from_sentence(word_example_list)
         score = test_fill_in_the_blank(word_blank_list)
