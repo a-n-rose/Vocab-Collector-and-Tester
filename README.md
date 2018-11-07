@@ -64,7 +64,7 @@ The user can:
 * create multiple lists with tags
 * add new words with a meaning, example sentences, tags
 * view the word - meaning pairs in each list
-* test knowledge via flashcard, fill-in-the-blank, or multiple choice quizes 
+* test knowledge via flashcard, fill-in-the-blank, or multiple choice quizzes 
 * navigate between functionalities quite easily as well as exit at almost any input instance
 * run tests on the application
 
