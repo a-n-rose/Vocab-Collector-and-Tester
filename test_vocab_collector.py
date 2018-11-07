@@ -30,8 +30,10 @@ class VocabInputCheck(unittest.TestCase):
     def test_rem_space_specialchar_empty(self):
         user_input = ''
         self.assertEqual(input_manager.rem_space_specialchar(user_input),None)
-    
-    
+  
+  
+  
+
 
 
 class TestUserVocabDatabase(unittest.TestCase):
@@ -176,6 +178,14 @@ class TestUserVocabDatabase(unittest.TestCase):
         self.assertEqual(self.db.get_words(),[])
         self.assertEqual(self.db.add_word(word,meaning,example,tags),None)
         self.assertEqual(self.db.get_words(),[(10,'Zehe','toe',"Eine Zehe von meinem linken Fuß ist blau geworden; Die zehn Zehen von Baby Füßchen sind super klein und so süß vergleicht mit den von erwachsenen Füßen.",'German; intermediate; funny; body; small',4)])
+
+    def test_coll_word_meanings(self):
+        self.db.curr_list_id = 2
+        word_meaning_pairs = [('bleu','blue'),('jaune','yellow'),('rouge','red')]
+        self.assertEqual(self.db.coll_word_meanings(),word_meaning_pairs)
+    
+    def test_prep_fill_in_the_blank(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()
