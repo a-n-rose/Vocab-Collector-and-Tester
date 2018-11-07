@@ -1,24 +1,3 @@
-'''
-Functionality I want:
-
-Run the program
-Option:
-~ new entry
-~ learn
-
-New Entry:
-" word "  (first version: also enter word meaning)
---> add to list OR new list
-
-Learn:
-options: all words or from word lists
-
-quiz options
-~ flashcards (first version)
-~ multiple choice 
-~ fill in the blank
-
-'''
 
 from vocab_collector import Collect_Vocab
 import traceback
