@@ -106,6 +106,12 @@ class TestUserVocabDatabase(unittest.TestCase):
     def test_check_if_user_exists_false(self):
         username = 'Jo'
         self.assertEqual(self.db.check_if_user_exists(username),(False,None))
+        
+    def test_add_user(self):
+        username = 'Jo'
+        password = 'JoJo'
+        self.assertEqual(self.db.add_user(username,password),None)
+        self.assertEqual(self.db.check_if_user_exists(username),(True,3))
     
 if __name__ == '__main__':
     unittest.main()
