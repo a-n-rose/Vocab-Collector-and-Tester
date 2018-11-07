@@ -1,12 +1,39 @@
 # Vocab-Collector-and-Tester
 My own personal vocabulary collector. Work in progress. Collect words in different languages in different lists. These are saved to a database via SQLite3.  Create quizes w write-in options, multiple choice, "flashcards".
 
+Here is my <a href="https://a-n-rose.github.io/2018/11/05/personal-vocab-app.html">blog post</a> about this project. 
+
 ## To Run:
-Installations: 
 
-I used Python 3.5 and Numpy 1.15.3 to build this app.
+### Download / Clone Repo
 
-Once those are installed and necessary scripts downloaded, enter into the command line:
+Put the scripts in this repo into desired Directory.
+
+### Install Python3
+
+If you don't have Python3 installed, make sure it's on your computer. I used Python3.5 to build this.
+
+### Start Virtual Environment
+
+If you don't have one yet, first enter this:
+```
+$ python3 -m venv env
+```
+
+To start the environment:
+```
+$ source env/bin/activate
+(env)...$
+```
+
+### Additional Installations 
+
+So far I only need to install Numpy
+```
+(env)...$ pip install Numpy
+```
+
+### Run Main Module
 ```
 $ python3 vocab_run.py 
 ```
@@ -21,6 +48,14 @@ To review words, the user has the options of 1) flashcards, 2) multiple choice, 
 
 At almost every input instance the user can type in 'exit' to close the application. 
 
+## Unittests
+
+To test the modules, enter the following into the command line:
+
+```
+(env)...$ python3 test_vocab_collector.py
+```
+
 
 ## Current State:
 
@@ -29,14 +64,13 @@ The user can:
 * create multiple lists with tags
 * add new words with a meaning, example sentences, tags
 * view the word - meaning pairs in each list
-* complete a fill-in-the-blank test for each list and earn a score
 * test knowledge via flashcard, fill-in-the-blank, or multiple choice quizes 
 * navigate between functionalities quite easily as well as exit at almost any input instance
+* run tests on the application
 
 ## ToDo:
-* further separate/organize functions --> apply test to them
 * improve quiz functionality (account for the complexities of language)
 * add tag sorting functionality
 * add columns in databases for 'last tested' and 'performance'. --> can create lists based on words/lists with poor performance
 * add editing capabilities
-* check that list names don't conflict/already exist
+
