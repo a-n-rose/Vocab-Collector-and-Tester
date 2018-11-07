@@ -26,7 +26,7 @@ from errors import ExitApp
 
 if __name__ == "__main__":
     try:
-        cv = Collect_Vocab()
+        cv = Collect_Vocab('vocab_REAL.db')
         cv.sign_in()
         while cv.is_user == True:
             cv.action_list()
