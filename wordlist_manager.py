@@ -51,7 +51,6 @@ def test_fill_in_the_blank(word_example_list):
     points = 0
     count = 0
     if len(word_example_list) > 0:
-        print(word_example_list)
         for word_set in word_example_list:
             word = word_set[0]
             num_ex = len(word_set[1])
