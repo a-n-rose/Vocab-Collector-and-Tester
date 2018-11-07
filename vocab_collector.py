@@ -270,10 +270,7 @@ class Collect_Vocab:
         return None
     
     def quiz_multchoice(self):
-        t = (str(self.curr_list_id))
-        msg = '''SELECT word, meaning from words WHERE word_list_id=? '''
-        self.c.execute(msg,t)
-        word_meaning_data = self.c.fetchall()
+        word_meaning_data = self.coll_word_meanings()
         if len(word_meaning_data) == 0:
             print("\nNo word meanings found.\n")
             return None
@@ -298,21 +295,14 @@ class Collect_Vocab:
         self.action_word()
         return None
     
-    def get_words(self):
-        t = (str(self.curr_list_id))
-        msg = '''SELECT * FROM words WHERE word_list_id=? '''
-        self.c.execute(msg,t)
-        words = self.c.fetchall()
-        return words
-    
     def show_words(self):
-        words = self.get_words()
+        word_meaning_data = self.coll_word_meanings()
         print("\nWords in this list: ")
-        if len(words) == 0:
+        if len(word_meaning_data) == 0:
             print("You haven't entered any words yet.")
         else:
-            for word in words:
-                print("{} : {}".format(word[1],word[2]))
+            for word in word_meaning_data:
+                print("{} : {}".format(word_meaning_data[0],word_meaning_data[1]))
         self.action_word()
         return None
     
