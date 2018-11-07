@@ -252,11 +252,15 @@ class Collect_Vocab:
         self.conn.commit()
         return None
     
-    def quiz_flashcard(self):
+    def coll_word_meanings(self):
         t = (str(self.curr_list_id))
         msg = '''SELECT word, meaning from words WHERE word_list_id=? '''
         self.c.execute(msg,t)
         word_meaning_data = self.c.fetchall()
+        return word_meaning_data
+    
+    def quiz_flashcard(self):
+        word_meaning_data = self.coll_word_meanings()
         if len(word_meaning_data) == 0:
             print("\nNo word meanings found.\n")
             return None
