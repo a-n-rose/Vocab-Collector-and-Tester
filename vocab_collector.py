@@ -78,7 +78,7 @@ class Collect_Vocab:
         users = self.c.fetchall()
         #print(users)
         if len(users) == 1:
-            return True, users[0]
+            return True, users[0][0]
         elif len(users) == 0:
             return False, None
         return None, None
