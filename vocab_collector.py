@@ -76,7 +76,6 @@ class Collect_Vocab:
         t = (username,)
         self.c.execute('''SELECT * FROM users WHERE username=? ''', t)
         users = self.c.fetchall()
-        #print(users)
         if len(users) == 1:
             return True, users[0][0]
         elif len(users) == 0:
@@ -88,7 +87,6 @@ class Collect_Vocab:
         msg = '''SELECT password FROM users WHERE username=? ''' 
         self.c.execute(msg,t)
         real_password = self.c.fetchall()[0][0]
-        #print("password = {}\nreal password = {}".format(password, real_password))
         if password == real_password:
             self.is_user = True
             self.username = username
@@ -131,7 +129,6 @@ class Collect_Vocab:
                     list_name,list_tags = get_list_info()
                     self.create_new_list(list_name,list_tags)
                     self.action_word()
-                    #self.check_lists()
             else:
                 if 'exit' in action_int.lower():
                     self.is_user = False
@@ -188,7 +185,6 @@ class Collect_Vocab:
         for key,value in self.dict_lists.items():
             if curr_list_num == value[1]:
                 self.curr_list_id = value[0]
-                #print("The current list ID is: {}".format(self.curr_list_id))
                 return None
         else:
             print("\nPlease choose a corresponding number\n".upper())
@@ -210,7 +206,6 @@ class Collect_Vocab:
             name,tags = get_list_info()
             self.create_new_list(name,tags)
             self.action_word()
-            #self.check_lists()
         else:
             self.dict_lists = {}
             for list_index in range(len(lists)):
@@ -262,7 +257,6 @@ class Collect_Vocab:
         msg = '''SELECT word, meaning from words WHERE word_list_id=? '''
         self.c.execute(msg,t)
         word_meaning_data = self.c.fetchall()
-        #print(word_meaning_data)
         if len(word_meaning_data) == 0:
             print("\nNo word meanings found.\n")
             return None
