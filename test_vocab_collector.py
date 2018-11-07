@@ -1,10 +1,38 @@
-import os
-import sqlite3
 import unittest
-
-
+import sqlite3
+import os
+#import input_manager module
+import input_manager
+#import wordlist_manager module
+import wordlist_manager
 #import class from module with my functions:
 from vocab_collector import Collect_Vocab
+
+
+class VocabInputCheck(unittest.TestCase):
+
+    def test_rem_space_specialchar_nospace_nospecialchar(self):
+        user_input = 'Stacey'
+        self.assertEqual(input_manager.rem_space_specialchar(user_input),'Stacey')
+        
+    def test_rem_space_specialchar_withspace_nospecialchar(self):
+        user_input = 'S t a c e y'
+        self.assertEqual(input_manager.rem_space_specialchar(user_input),'Stacey')
+        
+    def test_rem_space_specialchar_nospace_withspecialchar(self):
+        user_input = '$()(S?@ta______c&!e+=y'
+        self.assertEqual(input_manager.rem_space_specialchar(user_input),'Stacey')
+        
+    def test_rem_space_specialchar_noalphanumeric(self):
+        user_input = '*#(!)  (# #&___$$(@ '
+        self.assertEqual(input_manager.rem_space_specialchar(user_input),None)
+        
+    def test_rem_space_specialchar_empty(self):
+        user_input = ''
+        self.assertEqual(input_manager.rem_space_specialchar(user_input),None)
+    
+    
+
 
 class TestUserVocabDatabase(unittest.TestCase):
     '''
@@ -148,6 +176,6 @@ class TestUserVocabDatabase(unittest.TestCase):
         self.assertEqual(self.db.get_words(),[])
         self.assertEqual(self.db.add_word(word,meaning,example,tags),None)
         self.assertEqual(self.db.get_words(),[(10,'Zehe','toe',"Eine Zehe von meinem linken Fuß ist blau geworden; Die zehn Zehen von Baby Füßchen sind super klein und so süß vergleicht mit den von erwachsenen Füßen.",'German; intermediate; funny; body; small',4)])
-    
+
 if __name__ == '__main__':
     unittest.main()
