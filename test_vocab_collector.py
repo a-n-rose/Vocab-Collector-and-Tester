@@ -184,6 +184,13 @@ class TestUserVocabDatabase(unittest.TestCase):
         word_meaning_pairs = [('bleu','blue'),('jaune','yellow'),('rouge','red')]
         self.assertEqual(self.db.coll_word_meanings(),word_meaning_pairs)
     
+    def test_get_total_score(self):
+        goal_score = 61.54
+        points = 40
+        total_points_possible = 65
+        self.assertEqual(wordlist_manager.get_total_score(points,total_points_possible),goal_score)
+        
+    
     def test_prep_fill_in_the_blank(self):
         pass
 
