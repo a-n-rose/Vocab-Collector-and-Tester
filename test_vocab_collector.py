@@ -216,6 +216,14 @@ class TestUserVocabDatabase(unittest.TestCase):
         self.assertEqual(len(wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list)),len(['two','fifty','one']))
         self.assertEqual(target_meaning in wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list),False)
         
+    def test_setup_multchoice_dict(self):
+        goal_len = 4
+        answer_index = 1
+        target_meaning = 'funny'
+        wrongmeaning_list = ['sad','serious','excited']
+        test_dict = {'1':('excited',False),'2':('funny',True),'3':('sad',False),'4':('serious',False)}
+        self.assertEqual(wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['2'],test_dict['2'])
+        
         
     #def test_prep_multchoicedict(self):
         #possible_choices = ['blue','yellow','red']
