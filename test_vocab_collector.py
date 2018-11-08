@@ -200,9 +200,23 @@ class TestUserVocabDatabase(unittest.TestCase):
         word_meanings_pairs = [('bleu','blue'),('jaune','yellow'),('rouge','red')]
         self.assertEqual(wordlist_manager.get_possible_choices(word_meanings_pairs),['blue','yellow','red'])
         
+        
+
+
+
+    def test_prep_wrong_meanings_short(self):
+        possible_meanings_list = ['two','three']
+        target_meaning = 'three'
+        self.assertEqual(wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list),['two'])
+        
+        
+    #def test_prep_multchoicedict(self):
+        #possible_choices = ['blue','yellow','red']
+        #target_pair = ('jaune','yellow')
+        #self.assertEqual(wordlist_manager.prep_multchoicedict(target_pair,possible_choices),{})
     
-    def test_prep_fill_in_the_blank(self):
-        pass
+    #def test_prep_fill_in_the_blank(self):
+        #pass
 
 if __name__ == '__main__':
     unittest.main()
