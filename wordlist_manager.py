@@ -22,6 +22,8 @@ def rem_word_from_sentence(word_example_list):
             if sentence != '':
                 if word_set[0].lower() in sentence.lower():
                     blank = '_'*len(word_set[0])
+                    #problem here:
+                    #removes all capitalized letters which are necessary in some languages
                     sentence = sentence.lower().replace(word_set[0].lower(),blank)
                 blank_sentences.append(sentence)
         word_blank_list.append((word_set[0],blank_sentences))
