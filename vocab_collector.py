@@ -279,7 +279,7 @@ class Collect_Vocab:
         self.action_word()
         return None
     
-    def quiz_fillblank(self):
+    def coll_word_examples(self):
         t = (str(self.curr_list_id))
         msg = '''SELECT word, example_sentence FROM words WHERE word_list_id=? '''
         self.c.execute(msg,t)
@@ -287,6 +287,10 @@ class Collect_Vocab:
         if len(words_examples) == 0:
             print("\nNo example sentences found.\n")
             return None
+        return words_examples
+    
+    def quiz_fillblank(self):
+        words_examples = self.coll_word_examples()
         word_example_list = prep_fill_in_the_blank(words_examples)
         word_blank_list = rem_word_from_sentence(word_example_list)
         score = test_fill_in_the_blank(word_blank_list)
