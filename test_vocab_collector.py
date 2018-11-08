@@ -209,6 +209,13 @@ class TestUserVocabDatabase(unittest.TestCase):
         target_meaning = 'three'
         self.assertEqual(wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list),['two'])
         
+    def test_prep_wrong_meanings_long(self):
+        possible_meanings_list = ['two','three','fifty','one','five','nine','eighty']
+        target_meaning = 'three'
+        #can only look at the length of the list and if the target meaning is in the list
+        self.assertEqual(len(wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list)),len(['two','fifty','one']))
+        self.assertEqual(target_meaning in wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list),False)
+        
         
     #def test_prep_multchoicedict(self):
         #possible_choices = ['blue','yellow','red']
