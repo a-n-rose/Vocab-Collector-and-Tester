@@ -190,6 +190,8 @@ class TestUserVocabDatabase(unittest.TestCase):
         word_meaning_pairs = [('bleu','blue'),('jaune','yellow'),('rouge','red')]
         self.assertEqual(self.db.coll_word_meanings(),word_meaning_pairs)
     
+    ############### MULTIPLE CHOICE ####################
+    
     def test_get_total_score(self):
         goal_score = 61.54
         points = 40
@@ -200,10 +202,6 @@ class TestUserVocabDatabase(unittest.TestCase):
         word_meanings_pairs = [('bleu','blue'),('jaune','yellow'),('rouge','red')]
         self.assertEqual(wordlist_manager.get_possible_choices(word_meanings_pairs),['blue','yellow','red'])
         
-        
-
-
-
     def test_prep_wrong_meanings_short(self):
         possible_meanings_list = ['two','three']
         target_meaning = 'three'
@@ -216,7 +214,7 @@ class TestUserVocabDatabase(unittest.TestCase):
         self.assertEqual(len(wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list)),len(['two','fifty','one']))
         self.assertEqual(target_meaning in wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list),False)
         
-    def test_setup_multchoice_dict(self):
+    def test_setup_multchoice_dict_correctanswer(self):
         goal_len = 4
         answer_index = 1
         target_meaning = 'funny'
@@ -224,14 +222,51 @@ class TestUserVocabDatabase(unittest.TestCase):
         test_dict = {'1':('excited',False),'2':('funny',True),'3':('sad',False),'4':('serious',False)}
         self.assertEqual(wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['2'],test_dict['2'])
         
+    def test_setup_multchoice_dict_wronganswer1(self):
+        goal_len = 4
+        answer_index = 1
+        target_meaning = 'funny'
+        wrongmeaning_list = ['sad','serious','excited']
+        test_dict = {'1':('excited',False),'2':('funny',True),'3':('sad',False),'4':('serious',False)}
+        self.assertEqual(wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['1'][1],False)
         
-    #def test_prep_multchoicedict(self):
-        #possible_choices = ['blue','yellow','red']
-        #target_pair = ('jaune','yellow')
-        #self.assertEqual(wordlist_manager.prep_multchoicedict(target_pair,possible_choices),{})
+    def test_setup_multchoice_dict_wronganswer2(self):
+        goal_len = 4
+        answer_index = 1
+        target_meaning = 'funny'
+        wrongmeaning_list = ['sad','serious','excited']
+        test_dict = {'1':('excited',False),'2':('funny',True),'3':('sad',False),'4':('serious',False)}
+        self.assertEqual(wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['3'][1],False)
+        
+    def test_setup_multchoice_dict_wronganswer3(self):
+        goal_len = 4
+        answer_index = 1
+        target_meaning = 'funny'
+        wrongmeaning_list = ['sad','serious','excited']
+        test_dict = {'1':('excited',False),'2':('funny',True),'3':('sad',False),'4':('serious',False)}
+        self.assertEqual(wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['4'][1],False)
+        
+        
     
-    #def test_prep_fill_in_the_blank(self):
-        #pass
+    ############### FLASHCARDS ####################
+    
+    def test_check_response_quiz_correct(self):
+        response = 'bathroom'
+        correct_meaning = 'Bathroom'
+        self.assertEqual(wordlist_manager.check_response_quiz(correct_meaning,response),True)
+    
+    def test_check_response_quiz_incorrect(self):
+        response = 'bath room'
+        correct_meaning = 'Bathroom'
+        self.assertEqual(wordlist_manager.check_response_quiz(correct_meaning,response),False)
+    
+    
+        
+    
+    
+    ############### FILL-IN-THE-BLANK ####################
+    
+    
 
 if __name__ == '__main__':
     unittest.main()
