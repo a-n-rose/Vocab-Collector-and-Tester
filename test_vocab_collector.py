@@ -78,6 +78,7 @@ class TestUserVocabDatabase(unittest.TestCase):
         vocablist1_words1 = ('1','Haus','house','Das Haus hat drei Schlafzimmer und zwei Badezimmer, perfekt für meine Familie; Er wollte sein Haus verkaufen weil es, ohne seine Kinder, zu groß war.','lifestyle; housing; accommodation','1')
         vocablist1_words2 = ('4','Frühstück','breakfast','Mein Magen morgens mag kein Frühstück; Zum Frühstück findet sie Pfannkuchen mit Ahornsirup am besten.','lifestyle; food; daily tasks','1')
         vocablist1_words3 = ('8','Büro','office','Meine Mama ist gerade im Büro weil sie einen Termin mit ihren Arbeitskollegen hat; Im Büro liegen alle meine Arbeitsunterlagen.','work; rooms;','1')
+        vocablist1_words4 = ('10','Der Fuß','foot','Sie haben auf meinen Fuß getreten!; Kannst Du meinem Fuß eine Massage geben?; Meine Füße sind zu groß für solche Schuhe.','body; every-day;','1')
         
         vocablist2_words1 = ('2','bleu','blue',"Aujourd'hui, il n'y a pas de nuages et le ciel est bleu.;Il est ennuyeux que les vêtements d'enfants soient en rose ou en bleu. Il y a tellement d'autres couleurs là-bas!",'French; colors; easy','2')
         vocablist2_words2 = ('3','jaune','yellow',"Voici le bus scolaire jaune vif.;Le soleil émet en réalité plus de lumière verte que de lumière jaune.",'French; colors; intermediate','2')
@@ -266,7 +267,28 @@ class TestUserVocabDatabase(unittest.TestCase):
     
     ############### FILL-IN-THE-BLANK ####################
     
-    
+    def test_coll_word_examples(self):
+        
+        self.db.curr_list_id = 2
+        expected_result = [('bleu',"Aujourd'hui, il n'y a pas de nuages et le ciel est bleu.;Il est ennuyeux que les vêtements d'enfants soient en rose ou en bleu. Il y a tellement d'autres couleurs là-bas!"),('jaune',"Voici le bus scolaire jaune vif.;Le soleil émet en réalité plus de lumière verte que de lumière jaune."),('rouge',"Le ketchup a laissé plusieurs taches rouges sur le tapis.;Ses yeux sont rouges parce qu'il n'a pas dormi la nuit dernière.")]
+        
+        self.assertEqual(self.db.coll_word_examples(),expected_result)
+        
+    def test_prep_fill_in_the_blank(self):
+        self.db.curr_list_id = 2
+        wordexample_tuple_list = self.db.coll_word_examples()
+        expected_result = [('bleu',["Aujourd'hui, il n'y a pas de nuages et le ciel est bleu.","Il est ennuyeux que les vêtements d'enfants soient en rose ou en bleu. Il y a tellement d'autres couleurs là-bas!"]),('jaune',["Voici le bus scolaire jaune vif.","Le soleil émet en réalité plus de lumière verte que de lumière jaune."]),('rouge',["Le ketchup a laissé plusieurs taches rouges sur le tapis.","Ses yeux sont rouges parce qu'il n'a pas dormi la nuit dernière."])]
+        self.assertEqual(wordlist_manager.prep_fill_in_the_blank(wordexample_tuple_list),expected_result)
+        
+    def test_rem_word_from_sentence_current(self):
+        self.db.curr_list_id = 2
+        wordexample_tuple_list = self.db.coll_word_examples()
+        word_example_list = wordlist_manager.prep_fill_in_the_blank(wordexample_tuple_list)
+        examplelist = [('bleu',["Aujourd'hui, il n'y a pas de nuages et le ciel est ____.","Il est ennuyeux que les vêtements d'enfants soient en rose ou en ____. Il y a tellement d'autres couleurs là-bas!"]),('jaune',["Voici le bus scolaire _____ vif.","Le soleil émet en réalité plus de lumière verte que de lumière _____."]),('rouge',["Le ketchup a laissé plusieurs taches _____s sur le tapis.","Ses yeux sont _____s parce qu'il n'a pas dormi la nuit dernière."])]
+        expected_result = []
+        for item in examplelist:
+            expected_result.append((item[0],[item[1][i].lower() for i in range(len(item[1]))]))
+        self.assertEqual(wordlist_manager.rem_word_from_sentence(word_example_list),expected_result)
 
 if __name__ == '__main__':
     unittest.main()
