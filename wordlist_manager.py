@@ -113,33 +113,40 @@ def show_score(score):
     print("\nYour score: {}% \n{}".format(score,msg))
     return None
 
-
-
-def prep_multchoicedict(wordmeaning_tuple,possible_meanings_list):
-    #select at random wrong meanings for the target word
+def prep_wrong_meanings(target_meaning, possible_meanings_list):
+    # select at random wrong meanings for the target word
+    # save them to a new list 'wrong_options'
     list_target_removed = possible_meanings_list.copy()
-    list_target_removed.remove(wordmeaning_tuple[1])
+    list_target_removed.remove(target_meaning)
     if len(list_target_removed) < 3:
         rand_indices = random.sample(range(len(list_target_removed)),len(list_target_removed))
     else:
         rand_indices = random.sample(range(len(list_target_removed)),3)
+    print("Random indices: {}".format(rand_indices))
     wrong_options = [list_target_removed[j] for j in rand_indices]
+    return wrong_options
+
+def prep_multchoicedict(wordmeaning_tuple,possible_meanings_list):
+    wrong_options = prep_wrong_meanings(wordingmeaning_tuple[1],possible_meanings_list)
+    
     
     #choose the answer index at random:
     goal_len = len(wrong_options)+1
     answer_index = random.choice(random.sample(range(goal_len),1))
-    
+    print("Answer index: {}".format(answer_index))
     #prep dictionary for presenting multiple choice question
     dict_options = {}
     for i in range(goal_len):
         if i == answer_index:
             dict_options[str(i+1)] = (wordmeaning_tuple[1],True)
+            print("Matching answer index")
         else:
             if len(wrong_options) > 0:
                 dict_options[str(i+1)] = (wrong_options[0],False)
                 wrong_options.remove(wrong_options[0])
             else:
                 print("Hmmmm something funny happened while making the multiple choice dict.")
+    print(dict_options)
     return dict_options
 
 
