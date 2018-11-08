@@ -122,32 +122,41 @@ def prep_wrong_meanings(target_meaning, possible_meanings_list):
         rand_indices = random.sample(range(len(list_target_removed)),len(list_target_removed))
     else:
         rand_indices = random.sample(range(len(list_target_removed)),3)
-    print("Random indices: {}".format(rand_indices))
     wrong_options = [list_target_removed[j] for j in rand_indices]
     return wrong_options
 
-def prep_multchoicedict(wordmeaning_tuple,possible_meanings_list):
-    wrong_options = prep_wrong_meanings(wordingmeaning_tuple[1],possible_meanings_list)
-    
-    
-    #choose the answer index at random:
-    goal_len = len(wrong_options)+1
+def get_answer_index(goal_len):
     answer_index = random.choice(random.sample(range(goal_len),1))
-    print("Answer index: {}".format(answer_index))
-    #prep dictionary for presenting multiple choice question
+    return answer_index
+    
+def setup_multchoice_dict(goal_len, answer_index, target_meaning, wrongmeaning_list):
+    ''' This assigns a random index for the answer 
+    so that the answer is not always in the same spot when 
+    presenting options to the user. The possible meanings are put in random
+    order when the list was made'''
     dict_options = {}
     for i in range(goal_len):
         if i == answer_index:
-            dict_options[str(i+1)] = (wordmeaning_tuple[1],True)
-            print("Matching answer index")
+            dict_options[str(i+1)] = (target_meaning,True)
         else:
-            if len(wrong_options) > 0:
-                dict_options[str(i+1)] = (wrong_options[0],False)
-                wrong_options.remove(wrong_options[0])
+            if len(wrongmeaning_list) > 0:
+                dict_options[str(i+1)] = (wrongmeaning_list[0],False)
+                wrongmeaning_list.remove(wrongmeaning_list[0])
             else:
                 print("Hmmmm something funny happened while making the multiple choice dict.")
-    print(dict_options)
     return dict_options
+
+def prep_multchoicedict(wordmeaning_tuple,possible_meanings_list):
+    #prep wrong options
+    wrong_options = prep_wrong_meanings(wordingmeaning_tuple[1],possible_meanings_list)
+    
+    #choose the answer index at random:
+    goal_len = len(wrong_options)+1
+    answer_index = get_answer_index(goal_len)
+    
+    #prep dictionary for presenting multiple choice question
+    multchoice_dict = setup_multchoice_dict(goal_len,answer_index,wordingmeaning_tuple[1],wrong_options)
+    return multchoice_dict
 
 
 def get_response_multiplechoice(wordmeaning_tuple,possible_meanings_list):
