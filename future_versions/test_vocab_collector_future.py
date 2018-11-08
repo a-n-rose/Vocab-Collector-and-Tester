@@ -9,11 +9,11 @@ import unittest
 import sqlite3
 import os
 #import input_manager module
-import input_manager
+import input_manager_future as input_manager
 #import wordlist_manager module
-import wordlist_manager
+import wordlist_manager_future as wordlist_manager
 #import class from module with my functions:
-from vocab_collector import Collect_Vocab
+from vocab_collector_future import Collect_Vocab
 
 
 class VocabInputCheck(unittest.TestCase):
