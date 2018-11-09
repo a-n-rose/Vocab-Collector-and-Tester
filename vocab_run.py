@@ -5,10 +5,10 @@ from errors import ExitApp
 
 if __name__ == "__main__":
     try:
-        cv = Collect_Vocab('vocab_REAL.db')
-        cv.sign_in()
-        while cv.is_user == True:
-            cv.action_list()
+        user = Collect_Vocab('vocab_REAL.db')
+        user.sign_in()
+        while user.is_user == True:
+            user.action_list()
             
     except ExitApp as e:
         print(e)
@@ -17,5 +17,5 @@ if __name__ == "__main__":
         traceback.print_tb(e)
         
     finally:
-        if cv.conn:
-            cv.conn.close()
+        if user.conn:
+            user.conn.close()
