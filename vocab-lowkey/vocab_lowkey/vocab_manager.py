@@ -1,8 +1,19 @@
 import sqlite3        
 import re
-from errors import ExitApp
-from input_manager import rem_space_specialchar, get_word_info, get_list_info
-from wordlist_manager import prep_fill_in_the_blank, test_fill_in_the_blank,  rem_word_from_sentence, test_flashcards, show_score, test_multiplechoice
+import vocab_lowkey as vlk
+from vocab_lowkey.input_manager import (
+    rem_space_specialchar, 
+    get_word_info, 
+    get_list_info,
+)
+from vocab_lowkey.wordlist_manager import (
+    prep_fill_in_the_blank, 
+    test_fill_in_the_blank,  
+    rem_word_from_sentence, 
+    test_flashcards, 
+    show_score, 
+    test_multiplechoice,
+)
 
 
 class Collect_Vocab:
@@ -19,7 +30,7 @@ class Collect_Vocab:
         username = input("Spaces and special characters will be removed: ")
         username = rem_space_specialchar(username)
         if 'exit' == username.lower():
-            raise ExitApp("Aw man. I didn't even catch your name. Come back soon!") 
+            raise vlk.errors.ExitApp("Aw man. I didn't even catch your name. Come back soon!") 
         if username:
             return username
         else:
@@ -36,7 +47,7 @@ class Collect_Vocab:
         print("\nEnter your password to access your lists.\n")
         password = self.get_password()
         if 'exit' == password.lower():
-            raise ExitApp("Aw man. You're leaving already? Come back soon!") 
+            raise vlk.errors.ExitApp("Aw man. You're leaving already? Come back soon!") 
         if password:
             match = self.check_password(username, password)
             return match
@@ -137,7 +148,7 @@ class Collect_Vocab:
                     print("\nPlease enter 1 or 2\n".upper())
                     self.action_list()
         else:
-            raise ExitApp("Good job learning words! Until the next time :)")
+            raise vlk.errors.ExitApp("Good job learning words! Until the next time :)")
         return None
     
     def action_word(self):
