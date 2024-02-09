@@ -38,7 +38,7 @@ $ source env/bin/activate
 
 So far I only need to install Numpy and Pytest
 ```
-(env)...$ cd ./vocab-lowkey/
+(env)...$ cd ./vocabtrainer/
 (env)...$ poetry install
 ```
 
