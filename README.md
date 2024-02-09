@@ -67,6 +67,59 @@ To review words, the user has the options of 1) flashcards, 2) multiple choice, 
 
 At almost every input instance the user can type in 'exit' to close the application. 
 
+## Example:
+
+```
+Username: 
+Spaces and special characters will be removed: cactus
+
+Your username will be saved as 'cactus'
+
+Welcome cactus! Enter a password to create your account
+
+Password: 
+1357
+
+You're account has been created.
+Get started by creating your first list.
+
+
+For each list of words you create, you can add tags and example sentences.
+
+You can even test your knowledge with flashcards, multiple choice and fill-in-the-blank quizzes.
+
+
+Action:
+1) open existing list
+2) create new list
+Enter 1 or 2 (or exit): 2
+Name of list: 
+German
+Tags (separated by ;)
+maintain fluency
+
+Action:
+1) add word
+2) review words 
+3) change list
+Enter 1, 2, 3 (or exit): 1
+New word: 
+der Autofrachter
+Meaning: 
+car carrier
+Example sentence (if multiple, separate by ; ) 
+Demnächst kommt aber der Autofrachter von BYD nach Deutschland, um Autos in Deutschand zu verkaufen.
+Tags (separated by ;)
+trade; economics; transportation
+
+Action:
+1) add word
+2) review words 
+3) change list
+Enter 1, 2, 3 (or exit): 
+
+```
+
 
 ## Current State:
 
