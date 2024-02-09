@@ -3,59 +3,7 @@ My own personal vocabulary collector. Work in progress. Collect words in differe
 
 EDIT: I've randomly decided to play with this again and cleaned it up using Poetry. It's good enough to help preserve my German. We'll see if I further improve on it.
 
-## To Run:
-
-### Download / Clone Repo
-
-Put the scripts in this repo into desired Directory.
-
-### Install Python3 and Poetry
-
-If you don't have Python3 installed, make sure it's on your computer. I used Python3.5 to build this.
-
-### Get into the correct directory
-
-```
-$ cd ./Vocab-Collector-and-Tester/
-```
-
-### Start Virtual Environment
-
-If you don't have one yet, first enter this:
-```
-$ python3 -m venv env
-```
-
-To start the environment:
-```
-$ source env/bin/activate
-(env)...$
-```
-
-### Additional Installations: Access poetry lock file
-
-So far I only need to install Numpy and Pytest
-```
-(env)...$ cd ./vocabtrainer/
-(env)...$ poetry install
-```
-
-To run tests with poetry:
-
-```
-(env)...$ poetry run pytest
-```
-
-### Run Main Module
-
-You should then be able to run the package. Sorry for changing directories so often:
-
-```
-(env)...$ cd ..
-(env)...$ python3 vocab_run.py 
-```
-
-## About
+## Using the program
 
 The main menu is 'action_list' which asks the user if they would like to start a new list or look at an already created list. If there is no list yet created, the user is prompted to create one. Each list has a name and tags the user can specify.
 
@@ -187,6 +135,57 @@ Enter 1, 2, 3 (or exit):
 
 ```
 
+## To Run:
+
+### Download / Clone Repo
+
+Put the scripts in this repo into desired Directory.
+
+### Install Python3 and Poetry
+
+If you don't have Python3 installed, make sure it's on your computer. I used Python3.5 to build this.
+
+### Get into the correct directory
+
+```
+$ cd ./Vocab-Collector-and-Tester/
+```
+
+### Start Virtual Environment
+
+If you don't have one yet, first enter this:
+```
+$ python3 -m venv env
+```
+
+To start the environment:
+```
+$ source env/bin/activate
+(env)...$
+```
+
+### Additional Installations: Access poetry lock file
+
+So far I only need to install Numpy and Pytest
+```
+(env)...$ cd ./vocabtrainer/
+(env)...$ poetry install
+```
+
+To run tests with poetry:
+
+```
+(env)...$ poetry run pytest
+```
+
+### Run Main Module
+
+You should then be able to run the package. Sorry for changing directories so often:
+
+```
+(env)...$ cd ..
+(env)...$ python3 vocab_run.py 
+```
 
 ## Current State:
 
