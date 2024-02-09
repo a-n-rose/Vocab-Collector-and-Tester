@@ -49,6 +49,7 @@ def get_total_score(points,total_points_possible):
     score = round(points/float(total_points_possible)*100,2)
     return score
     
+# Bad name for a function: TODO replace word "test" 
 def test_fill_in_the_blank(word_example_list):
     points = 0
     count = 0
