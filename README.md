@@ -67,7 +67,7 @@ To review words, the user has the options of 1) flashcards, 2) multiple choice, 
 
 At almost every input instance the user can type in 'exit' to close the application. 
 
-## Example:
+## Example: Running the program for the first time
 
 ```
 Username: 
@@ -112,11 +112,78 @@ Demnächst kommt aber der Autofrachter von BYD nach Deutschland, um Autos in Deu
 Tags (separated by ;)
 trade; economics; transportation
 
+```
+## Example: Reviewing words
+
+```
+
+Action:
+1) add word
+2) review words 
+3) change list
+Enter 1, 2, 3 (or exit): 2
+
+Review:
+1) Flashcards
+2) Multiple Choice
+3) Fill in the blank
+4) View all words and their meanings
+Enter 1, 2, 3, 4 (or exit): 2
+
+Which of the meanings below (enter the corresponding number) best matches this word: 
+
+das Nachspiel
+
+1 --> car carrier
+
+2 --> aftermath
+
+3 --> in this country
+
+2
+
+Great job!
+
+
+Which of the meanings below (enter the corresponding number) best matches this word: 
+
+hierzulande
+
+1 --> aftermath
+
+2 --> in this country
+
+3 --> car carrier
+
+2
+
+Great job!
+
+
+Which of the meanings below (enter the corresponding number) best matches this word: 
+
+der Autofrachter
+
+1 --> aftermath
+
+2 --> in this country
+
+3 --> car carrier
+
+3
+
+Great job!
+
+
+Your score: 100.0% 
+Perfect score! I think you gotta find some harder words.
+
 Action:
 1) add word
 2) review words 
 3) change list
 Enter 1, 2, 3 (or exit): 
+
 
 ```
 
