@@ -13,6 +13,33 @@ def prep_fill_in_the_blank(wordexample_tuple_list):
         word_example_list.append((word,ex_list))
     return word_example_list
     
+def search_for_word(word_set:tuple, sentence:str) -> tuple:
+    """Checks if the word or parts of the word are in the sentence. 
+
+    Returns word or section of the word found in 'sentence'. If nothing found,
+    returns None.
+
+    German nouns contain relevant articles that change form in 
+    different contexts, e.g. "Das Haus gefällt mir" and "Sie ist im Haus".
+    This function aims to handle (at a basic level) such changes.
+    """
+    if word_set[0].lower() in sentence.lower():
+        word_tmp = word_set[0]
+        
+    #problem here:
+    #removes all capitalized letters which are necessary in some languages
+    # If the word has two parts, e.g. "das Haus", will look for either one
+    elif len(word_set[0].lower().split()) == 2:
+        if word_set[0].lower().split()[0] in sentence.lower():
+            word_tmp = word_set[0].split()[0]
+        elif word_set[0].lower().split()[1] in sentence.lower():
+            word_tmp = word_set[0].split()[1]
+        # TODO raise warning otherwise
+    blank = '_'*len(word_tmp)
+    start_index = sentence.lower().index(word_tmp.lower())
+    sentence = sentence.replace(sentence[start_index:start_index+len(blank)+1],blank)
+    return tuple(word_tmp, sentence)
+
 # Needs to be adapted to handle more complexities of language
 # Perhaps improvable with nltk? 
 # TODO add warnings for when cases are clearly missed.
@@ -23,24 +50,10 @@ def rem_word_from_sentence(word_example_list):
         blank_sentences = []
         for sentence in word_set[1]:
             if sentence != '':
-                #BUG: looks for entire word entry, e.g. das Haus. If im Haus is example sentence, will fail.
-                if word_set[0].lower() in sentence.lower():
-                    blank = '_'*len(word_set[0])
-                    #problem here:
-                    #removes all capitalized letters which are necessary in some languages
-                    sentence = sentence.lower().replace(word_set[0].lower(),blank)
-                elif len(word_set[0].lower().split()) == 2:
-                    if word_set[0].lower().split()[0] in sentence.lower():
-                        word_tmp = word_set[0].lower().split()[0]
-                    elif word_set[0].lower().split()[1] in sentence.lower():
-                        word_tmp = word_set[0].lower().split()[1]
-                    # TODO raise warning otherwise
-                    blank = '_'*len(word_tmp)
-                    # TODO: To retain capitalization, use index instead?
-                    sentence = sentence.lower().replace(word_tmp,blank)
-                # TODO Raise warning if not completed as expected
-                blank_sentences.append(sentence)
-        word_blank_list.append((word_set[0],blank_sentences))
+                # TODO might not need word_tmp, aka the word actually present in sentence
+                word_tmp, sentence_w_blank = search_for_word(word_set, sentence)
+                blank_sentences.append(sentence_w_blank)
+        word_blank_list.append((word_tmp,blank_sentences))
     return word_blank_list
 
 def get_response_fill_in_the_blank(word,test_ex):
