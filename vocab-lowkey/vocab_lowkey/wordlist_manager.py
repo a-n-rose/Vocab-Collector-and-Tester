@@ -150,14 +150,14 @@ def setup_multchoice_dict(goal_len, answer_index, target_meaning, wrongmeaning_l
 
 def prep_multchoicedict(wordmeaning_tuple,possible_meanings_list):
     #prep wrong options
-    wrong_options = prep_wrong_meanings(wordingmeaning_tuple[1],possible_meanings_list)
+    wrong_options = prep_wrong_meanings(wordmeaning_tuple[1],possible_meanings_list)
     
     #choose the answer index at random:
     goal_len = len(wrong_options)+1
     answer_index = get_answer_index(goal_len)
     
     #prep dictionary for presenting multiple choice question
-    multchoice_dict = setup_multchoice_dict(goal_len,answer_index,wordingmeaning_tuple[1],wrong_options)
+    multchoice_dict = setup_multchoice_dict(goal_len,answer_index,wordmeaning_tuple[1],wrong_options)
     return multchoice_dict
 
 
