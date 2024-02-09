@@ -1,35 +1,32 @@
 import unittest
 import sqlite3
 import os
-#import input_manager module
-import input_manager
-#import wordlist_manager module
-import wordlist_manager
+import vocab_lowkey as vlk
 #import class from module with my functions:
-from vocab_collector import Collect_Vocab
+from vocab_lowkey.vocab_manager import Collect_Vocab
 
 
 class VocabInputCheck(unittest.TestCase):
 
     def test_rem_space_specialchar_nospace_nospecialchar(self):
         user_input = 'Stacey'
-        self.assertEqual(input_manager.rem_space_specialchar(user_input),'Stacey')
+        self.assertEqual(vlk.input_manager.rem_space_specialchar(user_input),'Stacey')
         
     def test_rem_space_specialchar_withspace_nospecialchar(self):
         user_input = 'S t a c e y'
-        self.assertEqual(input_manager.rem_space_specialchar(user_input),'Stacey')
+        self.assertEqual(vlk.input_manager.rem_space_specialchar(user_input),'Stacey')
         
     def test_rem_space_specialchar_nospace_withspecialchar(self):
         user_input = '$()(S?@ta______c&!e+=y'
-        self.assertEqual(input_manager.rem_space_specialchar(user_input),'Stacey')
+        self.assertEqual(vlk.input_manager.rem_space_specialchar(user_input),'Stacey')
         
     def test_rem_space_specialchar_noalphanumeric(self):
         user_input = '*#(!)  (# #&___$$(@ '
-        self.assertEqual(input_manager.rem_space_specialchar(user_input),None)
+        self.assertEqual(vlk.input_manager.rem_space_specialchar(user_input),None)
         
     def test_rem_space_specialchar_empty(self):
         user_input = ''
-        self.assertEqual(input_manager.rem_space_specialchar(user_input),None)
+        self.assertEqual(vlk.input_manager.rem_space_specialchar(user_input),None)
   
   
   
@@ -197,23 +194,23 @@ class TestUserVocabDatabase(unittest.TestCase):
         goal_score = 61.54
         points = 40
         total_points_possible = 65
-        self.assertEqual(wordlist_manager.get_total_score(points,total_points_possible),goal_score)
+        self.assertEqual(vlk.wordlist_manager.get_total_score(points,total_points_possible),goal_score)
         
     def test_get_possible_choices(self):
         word_meanings_pairs = [('bleu','blue'),('jaune','yellow'),('rouge','red')]
-        self.assertEqual(wordlist_manager.get_possible_choices(word_meanings_pairs),['blue','yellow','red'])
+        self.assertEqual(vlk.wordlist_manager.get_possible_choices(word_meanings_pairs),['blue','yellow','red'])
         
     def test_prep_wrong_meanings_short(self):
         possible_meanings_list = ['two','three']
         target_meaning = 'three'
-        self.assertEqual(wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list),['two'])
+        self.assertEqual(vlk.wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list),['two'])
         
     def test_prep_wrong_meanings_long(self):
         possible_meanings_list = ['two','three','fifty','one','five','nine','eighty']
         target_meaning = 'three'
         #can only look at the length of the list and if the target meaning is in the list
-        self.assertEqual(len(wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list)),len(['two','fifty','one']))
-        self.assertEqual(target_meaning in wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list),False)
+        self.assertEqual(len(vlk.wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list)),len(['two','fifty','one']))
+        self.assertEqual(target_meaning in vlk.wordlist_manager.prep_wrong_meanings(target_meaning,possible_meanings_list),False)
         
     def test_setup_multchoice_dict_correctanswer(self):
         goal_len = 4
@@ -221,7 +218,7 @@ class TestUserVocabDatabase(unittest.TestCase):
         target_meaning = 'funny'
         wrongmeaning_list = ['sad','serious','excited']
         test_dict = {'1':('excited',False),'2':('funny',True),'3':('sad',False),'4':('serious',False)}
-        self.assertEqual(wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['2'],test_dict['2'])
+        self.assertEqual(vlk.wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['2'],test_dict['2'])
         
     def test_setup_multchoice_dict_wronganswer1(self):
         goal_len = 4
@@ -229,7 +226,7 @@ class TestUserVocabDatabase(unittest.TestCase):
         target_meaning = 'funny'
         wrongmeaning_list = ['sad','serious','excited']
         test_dict = {'1':('excited',False),'2':('funny',True),'3':('sad',False),'4':('serious',False)}
-        self.assertEqual(wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['1'][1],False)
+        self.assertEqual(vlk.wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['1'][1],False)
         
     def test_setup_multchoice_dict_wronganswer2(self):
         goal_len = 4
@@ -237,7 +234,7 @@ class TestUserVocabDatabase(unittest.TestCase):
         target_meaning = 'funny'
         wrongmeaning_list = ['sad','serious','excited']
         test_dict = {'1':('excited',False),'2':('funny',True),'3':('sad',False),'4':('serious',False)}
-        self.assertEqual(wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['3'][1],False)
+        self.assertEqual(vlk.wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['3'][1],False)
         
     def test_setup_multchoice_dict_wronganswer3(self):
         goal_len = 4
@@ -245,7 +242,7 @@ class TestUserVocabDatabase(unittest.TestCase):
         target_meaning = 'funny'
         wrongmeaning_list = ['sad','serious','excited']
         test_dict = {'1':('excited',False),'2':('funny',True),'3':('sad',False),'4':('serious',False)}
-        self.assertEqual(wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['4'][1],False)
+        self.assertEqual(vlk.wordlist_manager.setup_multchoice_dict(goal_len,answer_index,target_meaning,wrongmeaning_list)['4'][1],False)
         
         
     
@@ -254,12 +251,12 @@ class TestUserVocabDatabase(unittest.TestCase):
     def test_check_response_quiz_correct(self):
         response = 'bathroom'
         correct_meaning = 'Bathroom'
-        self.assertEqual(wordlist_manager.check_response_quiz(correct_meaning,response),True)
+        self.assertEqual(vlk.wordlist_manager.check_response_quiz(correct_meaning,response),True)
     
     def test_check_response_quiz_incorrect(self):
         response = 'bath room'
         correct_meaning = 'Bathroom'
-        self.assertEqual(wordlist_manager.check_response_quiz(correct_meaning,response),False)
+        self.assertEqual(vlk.wordlist_manager.check_response_quiz(correct_meaning,response),False)
     
     
         
@@ -278,17 +275,17 @@ class TestUserVocabDatabase(unittest.TestCase):
         self.db.curr_list_id = 2
         wordexample_tuple_list = self.db.coll_word_examples()
         expected_result = [('bleu',["Aujourd'hui, il n'y a pas de nuages et le ciel est bleu.","Il est ennuyeux que les vêtements d'enfants soient en rose ou en bleu. Il y a tellement d'autres couleurs là-bas!"]),('jaune',["Voici le bus scolaire jaune vif.","Le soleil émet en réalité plus de lumière verte que de lumière jaune."]),('rouge',["Le ketchup a laissé plusieurs taches rouges sur le tapis.","Ses yeux sont rouges parce qu'il n'a pas dormi la nuit dernière."])]
-        self.assertEqual(wordlist_manager.prep_fill_in_the_blank(wordexample_tuple_list),expected_result)
+        self.assertEqual(vlk.wordlist_manager.prep_fill_in_the_blank(wordexample_tuple_list),expected_result)
         
     def test_rem_word_from_sentence_current(self):
         self.db.curr_list_id = 2
         wordexample_tuple_list = self.db.coll_word_examples()
-        word_example_list = wordlist_manager.prep_fill_in_the_blank(wordexample_tuple_list)
+        word_example_list = vlk.wordlist_manager.prep_fill_in_the_blank(wordexample_tuple_list)
         examplelist = [('bleu',["Aujourd'hui, il n'y a pas de nuages et le ciel est ____.","Il est ennuyeux que les vêtements d'enfants soient en rose ou en ____. Il y a tellement d'autres couleurs là-bas!"]),('jaune',["Voici le bus scolaire _____ vif.","Le soleil émet en réalité plus de lumière verte que de lumière _____."]),('rouge',["Le ketchup a laissé plusieurs taches _____s sur le tapis.","Ses yeux sont _____s parce qu'il n'a pas dormi la nuit dernière."])]
         expected_result = []
         for item in examplelist:
             expected_result.append((item[0],[item[1][i].lower() for i in range(len(item[1]))]))
-        self.assertEqual(wordlist_manager.rem_word_from_sentence(word_example_list),expected_result)
+        self.assertEqual(vlk.wordlist_manager.rem_word_from_sentence(word_example_list),expected_result)
 
 if __name__ == '__main__':
     unittest.main()
