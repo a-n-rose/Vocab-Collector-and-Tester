@@ -3,8 +3,6 @@ My own personal vocabulary collector. Work in progress. Collect words in differe
 
 EDIT: I've randomly decided to play with this again and cleaned it up using Poetry. It's good enough to help preserve my German. We'll see if I further improve on it.
 
-Here is my <a href="https://a-n-rose.github.io/2018/11/05/personal-vocab-app.html">blog post</a> about this project. 
-
 ## To Run:
 
 ### Download / Clone Repo
