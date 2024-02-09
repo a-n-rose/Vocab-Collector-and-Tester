@@ -67,14 +67,6 @@ To review words, the user has the options of 1) flashcards, 2) multiple choice, 
 
 At almost every input instance the user can type in 'exit' to close the application. 
 
-## Unittests
-
-To test the modules, enter the following into the command line:
-
-```
-(env)...$ python3 test_vocab_collector.py
-```
-
 
 ## Current State:
 
