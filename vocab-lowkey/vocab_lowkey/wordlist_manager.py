@@ -13,18 +13,32 @@ def prep_fill_in_the_blank(wordexample_tuple_list):
         word_example_list.append((word,ex_list))
     return word_example_list
     
-#Needs to be adapted to handle more complexities of language
+# Needs to be adapted to handle more complexities of language
+# Perhaps improvable with nltk? 
+# TODO add warnings for when cases are clearly missed.
+# TODO clean this function up
 def rem_word_from_sentence(word_example_list):
     word_blank_list = []
     for word_set in word_example_list:
         blank_sentences = []
         for sentence in word_set[1]:
             if sentence != '':
+                #BUG: looks for entire word entry, e.g. das Haus. If im Haus is example sentence, will fail.
                 if word_set[0].lower() in sentence.lower():
                     blank = '_'*len(word_set[0])
                     #problem here:
                     #removes all capitalized letters which are necessary in some languages
                     sentence = sentence.lower().replace(word_set[0].lower(),blank)
+                elif len(word_set[0].lower().split()) == 2:
+                    if word_set[0].lower().split()[0] in sentence.lower():
+                        word_tmp = word_set[0].lower().split()[0]
+                    elif word_set[0].lower().split()[1] in sentence.lower():
+                        word_tmp = word_set[0].lower().split()[1]
+                    # TODO raise warning otherwise
+                    blank = '_'*len(word_tmp)
+                    # TODO: To retain capitalization, use index instead?
+                    sentence = sentence.lower().replace(word_tmp,blank)
+                # TODO Raise warning if not completed as expected
                 blank_sentences.append(sentence)
         word_blank_list.append((word_set[0],blank_sentences))
     return word_blank_list
@@ -33,7 +47,7 @@ def get_response_fill_in_the_blank(word,test_ex):
     print("Enter the word that fills the blank.\n")
     print("\n{}\nYour answer:".format(test_ex))
     response = input()
-    if 'exit' == response.lower:
+    if 'exit' == response.lower():
         return None
     return response
 
@@ -42,6 +56,11 @@ def check_response_quiz(target_word,response):
     .lower() --->  this is very rudimentary.. eg German nouns need to be capitalized. This is to avoid if someone enters a word as capitalized, if it's at the beginning of a sentence, say.
     '''
     if response.lower() == target_word.lower():
+        print("\nWay to go!")
+        return True
+    elif response.lower() in target_word.lower():
+        print("\nThat's not quite the full answer, but we'll give you the points.")
+        print(f"The Correct answer: {target_word}")
         return True
     return False
     
@@ -57,7 +76,6 @@ def test_fill_in_the_blank(word_example_list):
         for word_set in word_example_list:
             word = word_set[0]
             num_ex = len(word_set[1])
-            print(word_set[1])
             rand_index = np.random.randint(low=0,high=num_ex)
             test_ex = word_set[1][rand_index]
             response = get_response_fill_in_the_blank(word,test_ex)
@@ -65,9 +83,9 @@ def test_fill_in_the_blank(word_example_list):
                 success = check_response_quiz(word,response)
                 if success:
                     points += 1
-                    print("\nWay to go!\n")
                 else:
-                    print("\nHmmmmm.. not exactly. Let's try the next word.\n")
+                    print(f"\nHmmmmm.. not exactly. The correct answer: {word}")
+                    print("Let's try the next word.\n")
                 count += 1
         score = get_total_score(points,count)
     else:
