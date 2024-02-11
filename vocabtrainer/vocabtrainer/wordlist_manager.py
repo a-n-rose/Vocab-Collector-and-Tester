@@ -1,6 +1,21 @@
 import re
 import numpy as np
 import random
+import string
+
+def remove_beg_space(sentence_examples_list):
+    """Ensure sentences don't start with empty space
+
+    Examples
+    >>> check_punctuation(['What?',' I don't know',' Shush!'])
+    ['What?','I don't know','Shush!']
+    """
+    for i, item in enumerate(sentence_examples_list):
+        if i > 0:
+            if item[0].isspace():
+                sentence_examples_list[i] = sentence_examples_list[i][1:]
+    return sentence_examples_list
+                
 
 def prep_fill_in_the_blank(wordexample_tuple_list):
     '''
@@ -11,6 +26,7 @@ def prep_fill_in_the_blank(wordexample_tuple_list):
         word = wordexample_tuple_list[item_index][0]
         #TODO add punctuation to first sentence, if split with ;
         ex_list = re.split(';',wordexample_tuple_list[item_index][1])
+        ex_list = remove_beg_space(ex_list)
         meaning = wordexample_tuple_list[item_index][2]
         word_example_list.append((word,ex_list,meaning))
     return word_example_list
