@@ -13,7 +13,7 @@ def prep_fill_in_the_blank(wordexample_tuple_list):
         word_example_list.append((word,ex_list))
     return word_example_list
     
-def search_for_word(word_set:tuple, sentence:str) -> tuple:
+def search_and_rm_word(word_set:tuple, sentence:str) -> tuple:
     """Checks if the word or parts of the word are in the sentence. 
 
     Returns word or section of the word found in 'sentence'. If nothing found,
@@ -37,8 +37,8 @@ def search_for_word(word_set:tuple, sentence:str) -> tuple:
         # TODO raise warning otherwise
     blank = '_'*len(word_tmp)
     start_index = sentence.lower().index(word_tmp.lower())
-    sentence = sentence.replace(sentence[start_index:start_index+len(blank)+1],blank)
-    return tuple(word_tmp, sentence)
+    sentence = sentence.replace(sentence[start_index:start_index+len(blank)],blank)
+    return tuple((word_tmp, sentence))
 
 # Needs to be adapted to handle more complexities of language
 # Perhaps improvable with nltk? 
@@ -51,7 +51,7 @@ def rem_word_from_sentence(word_example_list):
         for sentence in word_set[1]:
             if sentence != '':
                 # TODO might not need word_tmp, aka the word actually present in sentence
-                word_tmp, sentence_w_blank = search_for_word(word_set, sentence)
+                word_tmp, sentence_w_blank = search_and_rm_word(word_set, sentence)
                 blank_sentences.append(sentence_w_blank)
         word_blank_list.append((word_tmp,blank_sentences))
     return word_blank_list
