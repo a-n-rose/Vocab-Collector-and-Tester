@@ -108,7 +108,9 @@ class Collect_Vocab:
         return False
         
     def get_info(self):
-        msg = "\nFor each list of words you create, you can add tags and example sentences.\n\nYou can even test your knowledge with flashcards, multiple choice and fill-in-the-blank quizzes.\n"
+        msg = "\nFor each list of words you create, you can add tags and example sentences.\
+            \n\nYou can even test your knowledge with flashcards, multiple choice and \
+            fill-in-the-blank quizzes.\n"
         print(msg)
         return None
         
@@ -292,7 +294,7 @@ class Collect_Vocab:
     
     def coll_word_examples(self):
         t = (str(self.curr_list_id))
-        msg = '''SELECT word, example_sentence FROM words WHERE word_list_id=? '''
+        msg = '''SELECT word, example_sentence, meaning FROM words WHERE word_list_id=? '''
         self.c.execute(msg,t)
         words_examples = self.c.fetchall()
         if len(words_examples) == 0:

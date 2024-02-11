@@ -9,8 +9,10 @@ def prep_fill_in_the_blank(wordexample_tuple_list):
     word_example_list = []
     for item_index in range(len(wordexample_tuple_list)):
         word = wordexample_tuple_list[item_index][0]
+        #TODO add punctuation to first sentence, if split with ;
         ex_list = re.split(';',wordexample_tuple_list[item_index][1])
-        word_example_list.append((word,ex_list))
+        meaning = wordexample_tuple_list[item_index][2]
+        word_example_list.append((word,ex_list,meaning))
     return word_example_list
     
 def search_and_rm_word(word_set:tuple, sentence:str) -> tuple:
@@ -28,17 +30,17 @@ def search_and_rm_word(word_set:tuple, sentence:str) -> tuple:
         
     #problem here:
     #removes all capitalized letters which are necessary in some languages
-    # If the word has two parts, e.g. "das Haus", will look for either one
+    # If the word has two parts, e.g. "das Haus", will look for second one
+    # TODO improve as not all languages work that way, e.g. article then noun
     elif len(word_set[0].lower().split()) == 2:
-        if word_set[0].lower().split()[0] in sentence.lower():
-            word_tmp = word_set[0].split()[0]
-        elif word_set[0].lower().split()[1] in sentence.lower():
+        if word_set[0].lower().split()[1] in sentence.lower():
             word_tmp = word_set[0].split()[1]
         # TODO raise warning otherwise
     blank = '_'*len(word_tmp)
     start_index = sentence.lower().index(word_tmp.lower())
     sentence = sentence.replace(sentence[start_index:start_index+len(blank)],blank)
-    return tuple((word_tmp, sentence))
+    meaning = word_set[2]
+    return tuple((word_tmp, sentence, meaning))
 
 # Needs to be adapted to handle more complexities of language
 # Perhaps improvable with nltk? 
@@ -51,15 +53,16 @@ def rem_word_from_sentence(word_example_list):
         for sentence in word_set[1]:
             if sentence != '':
                 # TODO might not need word_tmp, aka the word actually present in sentence
-                word_tmp, sentence_w_blank = search_and_rm_word(word_set, sentence)
+                word_tmp, sentence_w_blank, meaning = search_and_rm_word(word_set, sentence)
                 blank_sentences.append(sentence_w_blank)
-        word_blank_list.append((word_tmp,blank_sentences))
+        word_blank_list.append((word_tmp,blank_sentences,meaning))
     return word_blank_list
 
 def get_response_fill_in_the_blank(word,test_ex):
     print("\n\nEnter the word that fills the blank.")
     print("\n{}\n\nYour answer:\n".format(test_ex))
     response = input()
+    print()
     if 'exit' == response.lower():
         return None
     return response
@@ -102,15 +105,35 @@ def test_fill_in_the_blank(word_example_list):
             num_ex = len(word_set[1])
             rand_index = np.random.randint(low=0,high=num_ex)
             test_ex = word_set[1][rand_index]
-            response = get_response_fill_in_the_blank(word,test_ex)
-            if response != None:
+            attempts = 0
+            while True:
+                response = get_response_fill_in_the_blank(word,test_ex)
+                if response == None:
+                    score_session = get_total_score(points, count)
+                    score_total_words = get_total_score(points, len(word_example_list))
+                    print(f"Score this session: {score_session}")
+                    return score_total_words
                 success = check_response_quiz(word,response)
                 if success:
                     points += 1
-                else:
-                    print(f"\nHmmmmm.. not exactly. The correct answer: {word}")
+                    break
+                elif attempts == 0:
+                    meaning = word_set[2]
+                    # TODO handle for no meaning provided in DB
+                    if meaning:
+                        print(f"\n\nINCORRECT. Here's a hint: '{meaning}'")
+                    else:
+                        print(f"\n\nINCORRECT. Here's a hint: '{word[0:int(len(word)/2+1)]}...'")
+                        attempts = 1
+                    attempts =+ 1
+                elif attempts ==1:
+                    print(f"\n\nINCORRECT. Here's a hint: '{word[0:int(len(word)/2+1)]}...'")
+                    attempts += 1
+                elif attempts > 1:
+                    print(f"\n\nINCORRECT. The correct answer: {word}")
                     print("Let's try the next word.")
-                count += 1
+                    break
+            count += 1
         score = get_total_score(points,count)
     else:
         print("\nNo example sentences were found. Try another quiz!")
@@ -155,7 +178,7 @@ def show_score(score):
         msg = "\nGreat work!"
     else:
         msg = "\nPerfect score! I think you gotta find some harder words."
-    print("Your score: {}% \n{}".format(score,msg))
+    print("Your total score: {}% \n{}".format(score,msg))
     return None
 
 def prep_wrong_meanings(target_meaning, possible_meanings_list):
