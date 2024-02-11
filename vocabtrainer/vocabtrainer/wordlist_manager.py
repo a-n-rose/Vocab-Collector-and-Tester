@@ -57,23 +57,34 @@ def rem_word_from_sentence(word_example_list):
     return word_blank_list
 
 def get_response_fill_in_the_blank(word,test_ex):
-    print("Enter the word that fills the blank.\n")
-    print("\n{}\nYour answer:".format(test_ex))
+    print("\n\nEnter the word that fills the blank.")
+    print("\n{}\n\nYour answer:\n".format(test_ex))
     response = input()
     if 'exit' == response.lower():
         return None
     return response
 
-def check_response_quiz(target_word,response):
+def check_response_quiz(target_word, response, difficulty="easy"):
     '''
-    .lower() --->  this is very rudimentary.. eg German nouns need to be capitalized. This is to avoid if someone enters a word as capitalized, if it's at the beginning of a sentence, say.
+    .lower() --->  this is very rudimentary.. eg German nouns need to be capitalized. 
+    This is to avoid if someone enters a word as capitalized, if it's at the beginning of a sentence, say.
+
+    TODO: Add strictness level and that level can be applied here,
+    e.g. making capitalization very strict, or using correct articles and such.
+
+    TODO: Make this accommodate complexity of language, e.g. conjugations, etc.
     '''
-    if response.lower() == target_word.lower():
+    if difficulty == "difficult":
+        if response == target_word:
+            return True 
+    elif response.lower() == target_word.lower():
         print("\nWay to go!")
         return True
-    elif response.lower() in target_word.lower():
+    # Ensure the second word matches, for example Haus in das Haus
+    elif len(target_word.split(" ")) == 2 and \
+        response.lower() == target_word.lower().split(" ")[1]:
         print("\nThat's not quite the full answer, but we'll give you the points.")
-        print(f"The Correct answer: {target_word}")
+        print(f"The correct answer: {target_word}")
         return True
     return False
     
@@ -98,11 +109,11 @@ def test_fill_in_the_blank(word_example_list):
                     points += 1
                 else:
                     print(f"\nHmmmmm.. not exactly. The correct answer: {word}")
-                    print("Let's try the next word.\n")
+                    print("Let's try the next word.")
                 count += 1
         score = get_total_score(points,count)
     else:
-        print("No example sentences were found. Try another quiz!")
+        print("\nNo example sentences were found. Try another quiz!")
         return None
     return score
 
@@ -114,7 +125,7 @@ def get_response_flashcard(wordmeaning_tuple):
         return None
     success = check_response_quiz(wordmeaning_tuple[1],response)
     if success:
-        print("\nGreat job!\n")
+        print("\nGreat job!")
     else:
         print("\nThis was the correct meaning: {}\n".format(wordmeaning_tuple[1]))
     return success
@@ -137,14 +148,14 @@ def test_flashcards(word_meaning_list):
 
 def show_score(score):
     if score < 70:
-        msg = "Great job practicing! Keep at it and you will improve."
+        msg = "\nGreat job practicing! Keep at it and you will improve."
     elif score < 90:
-        msg = "Not bad! On this track you'll know these words like the back of your hand!"
+        msg = "\nNot bad! On this track you'll know these words like the back of your hand!"
     elif score < 100:
-        msg = "Great work!"
+        msg = "\nGreat work!"
     else:
-        msg = "Perfect score! I think you gotta find some harder words."
-    print("\nYour score: {}% \n{}".format(score,msg))
+        msg = "\nPerfect score! I think you gotta find some harder words."
+    print("Your score: {}% \n{}".format(score,msg))
     return None
 
 def prep_wrong_meanings(target_meaning, possible_meanings_list):
@@ -235,4 +246,4 @@ def test_multiplechoice(word_meaning_list):
                 count += 1
     score = get_total_score(points,count)
     return score
-                
+            
