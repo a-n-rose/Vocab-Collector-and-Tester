@@ -271,14 +271,17 @@ class TestUserVocabDatabase(unittest.TestCase):
             (
                 'bleu',
                 "Aujourd'hui, il n'y a pas de nuages et le ciel est bleu.;Il est ennuyeux que les vêtements d'enfants soient en rose ou en bleu. Il y a tellement d'autres couleurs là-bas!",
+                'blue',
             ),
             (
                 'jaune',
                 "Voici le bus scolaire jaune vif.;Le soleil émet en réalité plus de lumière verte que de lumière jaune.",
+                'yellow',
             ),
             (
                 'rouge',
                 "Le ketchup a laissé plusieurs taches rouges sur le tapis.;Ses yeux sont rouges parce qu'il n'a pas dormi la nuit dernière.",
+                'red',
             )
         ]
         
@@ -291,14 +294,17 @@ class TestUserVocabDatabase(unittest.TestCase):
             (
                 'Haus', 
                 'Das Haus hat drei Schlafzimmer und zwei Badezimmer, perfekt für meine Familie; Er wollte sein Haus verkaufen weil es, ohne seine Kinder, zu groß war.',
+                'house',
             ), 
             (
                 'Frühstück', 
                 'Mein Magen morgens mag kein Frühstück; Zum Frühstück findet sie Pfannkuchen mit Ahornsirup am besten.',
+                'breakfast',
             ), 
             (
                 'Büro', 
                 'Meine Mama ist gerade im Büro weil sie einen Termin mit ihren Arbeitskollegen hat; Im Büro liegen alle meine Arbeitsunterlagen.',
+                'office',
             )
         ]
         self.assertEqual(self.db.coll_word_examples(),expected_result)
@@ -312,21 +318,24 @@ class TestUserVocabDatabase(unittest.TestCase):
                 [
                     "Aujourd'hui, il n'y a pas de nuages et le ciel est bleu.",
                     "Il est ennuyeux que les vêtements d'enfants soient en rose ou en bleu. Il y a tellement d'autres couleurs là-bas!",
-                ]
+                ],
+                'blue',
             ),
             (
                 'jaune',
                 [
                     "Voici le bus scolaire jaune vif.",
                     "Le soleil émet en réalité plus de lumière verte que de lumière jaune.",
-                ]
+                ],
+                'yellow',
             ),
             (
                 'rouge',
                 [
                     "Le ketchup a laissé plusieurs taches rouges sur le tapis.",
                     "Ses yeux sont rouges parce qu'il n'a pas dormi la nuit dernière.",
-                ]
+                ],
+                'red',
             )
         ]
         self.assertEqual(vt.wordlist_manager.prep_fill_in_the_blank(wordexample_tuple_list),expected_result)
@@ -341,27 +350,31 @@ class TestUserVocabDatabase(unittest.TestCase):
                 [
                     "Aujourd'hui, il n'y a pas de nuages et le ciel est ____.",
                     "Il est ennuyeux que les vêtements d'enfants soient en rose ou en ____. Il y a tellement d'autres couleurs là-bas!",
-                ]
+                ],
+                'blue',
             ),
             (
                 'jaune',
                 [
                     "Voici le bus scolaire _____ vif.",
                     "Le soleil émet en réalité plus de lumière verte que de lumière _____.",
-                ]
+                ],
+                'yellow',
             ),
             (
                 'rouge',
                 [
                     "Le ketchup a laissé plusieurs taches _____s sur le tapis.",
                     "Ses yeux sont _____s parce qu'il n'a pas dormi la nuit dernière.",
-                ]
+                ],
+                'red',
             )
         ]
         expected_result = []
         for item in examplelist:
             expected_result.append((item[0],[item[1][i] for i in range(len(item[1]))]))
 
+        print(vt.wordlist_manager.rem_word_from_sentence(word_example_list))
         self.assertEqual(vt.wordlist_manager.rem_word_from_sentence(word_example_list),expected_result)
 
     def test_rem_word_from_sentence_current_german(self):
@@ -374,23 +387,27 @@ class TestUserVocabDatabase(unittest.TestCase):
                 [
                     'Das ____ hat drei Schlafzimmer und zwei Badezimmer, perfekt für meine Familie.', 
                     'Er wollte sein ____ verkaufen weil es, ohne seine Kinder, zu groß war.',
-                ]
+                ],
+                'house',
             ), 
             (
                 'Frühstück', 
                 [
                     'Mein Magen morgens mag kein _________.', 
                     'Zum _________ findet sie Pfannkuchen mit Ahornsirup am besten.',
-                ]
+                ],
+                'breakfast',
             ), 
             (
                 'Büro', 
                 [
                     'Meine Mama ist gerade im ____ weil sie einen Termin mit ihren Arbeitskollegen hat.',
                     'Im ____ liegen alle meine Arbeitsunterlagen.',
-                ]
+                ],
+                'office',
             )
         ]
+        
         self.assertEqual(vt.wordlist_manager.rem_word_from_sentence(word_example_list),expected_result)
 
 
