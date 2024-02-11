@@ -372,9 +372,8 @@ class TestUserVocabDatabase(unittest.TestCase):
         ]
         expected_result = []
         for item in examplelist:
-            expected_result.append((item[0],[item[1][i] for i in range(len(item[1]))]))
+            expected_result.append((item[0],[item[1][i] for i in range(len(item[1]))], item[2]))
 
-        print(vt.wordlist_manager.rem_word_from_sentence(word_example_list))
         self.assertEqual(vt.wordlist_manager.rem_word_from_sentence(word_example_list),expected_result)
 
     def test_rem_word_from_sentence_current_german(self):
@@ -385,7 +384,7 @@ class TestUserVocabDatabase(unittest.TestCase):
             (
                 'Haus', 
                 [
-                    'Das ____ hat drei Schlafzimmer und zwei Badezimmer, perfekt für meine Familie.', 
+                    'Das ____ hat drei Schlafzimmer und zwei Badezimmer, perfekt für meine Familie', 
                     'Er wollte sein ____ verkaufen weil es, ohne seine Kinder, zu groß war.',
                 ],
                 'house',
@@ -393,7 +392,7 @@ class TestUserVocabDatabase(unittest.TestCase):
             (
                 'Frühstück', 
                 [
-                    'Mein Magen morgens mag kein _________.', 
+                    'Mein Magen morgens mag kein _________', 
                     'Zum _________ findet sie Pfannkuchen mit Ahornsirup am besten.',
                 ],
                 'breakfast',
@@ -401,7 +400,7 @@ class TestUserVocabDatabase(unittest.TestCase):
             (
                 'Büro', 
                 [
-                    'Meine Mama ist gerade im ____ weil sie einen Termin mit ihren Arbeitskollegen hat.',
+                    'Meine Mama ist gerade im ____ weil sie einen Termin mit ihren Arbeitskollegen hat',
                     'Im ____ liegen alle meine Arbeitsunterlagen.',
                 ],
                 'office',
