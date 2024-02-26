@@ -12,8 +12,11 @@ def remove_beg_space(sentence_examples_list):
     """
     for i, item in enumerate(sentence_examples_list):
         if i > 0:
-            if item[0].isspace():
-                sentence_examples_list[i] = sentence_examples_list[i][1:]
+            try:
+                if item[0].isspace():
+                    sentence_examples_list[i] = sentence_examples_list[i][1:]
+            except IndexError as e:
+                print(f"{e}: Skipping {item}")
     return sentence_examples_list
                 
 
@@ -41,6 +44,12 @@ def search_and_rm_word(word_set:tuple, sentence:str) -> tuple:
     different contexts, e.g. "Das Haus gefällt mir" and "Sie ist im Haus".
     This function aims to handle (at a basic level) such changes.
     """
+
+    """TODO word_tmp gets defined if word exists in sentence. BUT many words
+     take different forms in sentences. Need to fix this, perhaps with nltk?
+    """
+    # Word might not exist in database.. TODO test for this
+    word_tmp = "" 
     if word_set[0].lower() in sentence.lower():
         word_tmp = word_set[0]
         
@@ -52,6 +61,9 @@ def search_and_rm_word(word_set:tuple, sentence:str) -> tuple:
         if word_set[0].lower().split()[1] in sentence.lower():
             word_tmp = word_set[0].split()[1]
         # TODO raise warning otherwise
+            
+    
+    
     blank = '_'*len(word_tmp)
     start_index = sentence.lower().index(word_tmp.lower())
     sentence = sentence.replace(sentence[start_index:start_index+len(blank)],blank)
